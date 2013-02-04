@@ -12,4 +12,8 @@
     <string name="authentificationSuccessful">Authentification was successful. You are now linked to Dropbox.</string>
     <string name="dropboxUnlinkSucces">You successfully unlinked this app from Dropbox.</string>
 
+    <!-- menu items -->
+    <string name="refresh">Refresh</string>
+    <string name="about">About</string>
+
 </resources>

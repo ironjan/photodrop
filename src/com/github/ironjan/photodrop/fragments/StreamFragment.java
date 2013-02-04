@@ -4,6 +4,7 @@ import android.database.DataSetObserver;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+import com.github.ironjan.photodrop.OSLibsActivity_;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.StartActivity_;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
@@ -16,7 +17,7 @@ import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 
 @EFragment
-@OptionsMenu(R.menu.dropbox)
+@OptionsMenu({R.menu.dropbox, R.menu.main})
 public class StreamFragment extends SherlockListFragment {
 
 	@Bean
@@ -44,6 +45,11 @@ public class StreamFragment extends SherlockListFragment {
 	void unlinkDropbox() {
 		sessionKeeper.unlink();
 		StartActivity_.intent(getActivity()).start();
+	}
+	
+	@OptionsItem(R.id.mnuAbout)
+	void mnuAboutClicked(){
+		OSLibsActivity_.intent(getActivity()).start();
 	}
 
 	void invalidateList() {

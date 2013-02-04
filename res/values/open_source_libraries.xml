@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- This file is language independent. -->
+
+
+    <!-- actionbarsherlock -->
+    <string name="lib_name_abs" translatable="false">ActionBarSherlock</string>
+    <string name="lib_link_abs" translatable="false">&lt;a href=&quot;http://actionbarsherlock.com/&quot;>http://actionbarsherlock.com/&lt;/a></string>
+    <string name="lib_note_abs" translatable="false">Copyright 2012 Jake Wharton&lt;br>
+&lt;br>
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at&lt;br>
+&lt;br>
+&lt;center>&lt;a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0&lt;/a>&lt;/center>&lt;br>
+&lt;br>
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&lt;br>
+See the License for the specific language governing permissions and limitations under the License.</string>
+
+    <!-- android annotations -->
+    <string name="lib_name_aa" translatable="false">AndroidAnnotations</string>
+    <string name="lib_link_aa" translatable="false">&lt;a href=&quot;http://androidannotations.org/&quot;>http://androidannotations.org/&lt;/a></string>
+    <string name="lib_note_aa" translatable="false">Copyright 2012 eBusiness Information&lt;br>
+&lt;br>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;br>
+&lt;br>
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0&lt;/a>&lt;br>
+&lt;br>
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;br>
+&lt;br>
+This project uses CodeModel (&lt;a href="http://codemodel.java.net/">http://codemodel.java.net/&lt;/a>), which is distributed under the GlassFish Dual License, which means CodeModel is subject to the terms of either the GNU General Public License Version 2 only ("GPL") or the Common Development and Distribution License("CDDL").&lt;br>
+&lt;br>
+You may obtain a copy of the "CDDL" License at&lt;br>
+&lt;br>
+&lt;a href="http://www.opensource.org/licenses/cddl1.php">http://www.opensource.org/licenses/cddl1.php&lt;/a>&lt;br>
+&lt;br>
+As per section 3.6 ("Larger Works") of the "CDDL" License, we may create a Larger Work by combining Covered Software with other code not governed by the terms of this License and distribute the Larger Work as a single product.&lt;br>
+&lt;br>
+We are therefore allowed to distribute CodeModel without Modification as part of AndroidAnnotations.</string>
+
+    <!-- holo everywhere -->
+    <string name="lib_name_he" translatable="false">HoloEverywhere</string>
+    <string name="lib_link_he" translatable="false">&lt;a href=&quot;https://github.com/ChristopheVersieux/HoloEverywhere&quot;>https://github.com/ChristopheVersieux/HoloEverywhere&lt;/a></string>
+    <string name="lib_note_he" translatable="false" tools:ignore="TypographyOther">Copyright (c) 2012 Christophe Versieux, Sergey Shatunov&lt;br>
+&lt;br>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:&lt;br>
+&lt;br>
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&lt;br>
+&lt;br>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <string name="plain_text">plain/text</string>
+
+    <!-- simple json -->
+    <string name="lib_name_json" translatable="false">JSON.simple</string>
+    <string name="lib_link_json" translatable="false">&lt;a href=&quot;http://code.google.com/p/json-simple/&quot;>http://code.google.com/p/json-simple/&lt;/a></string>
+    <string name="lib_note_json" translatable="false">Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;br>
+&lt;br>
+       &lt;a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0&lt;/a>&lt;br>
+&lt;br>
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. &lt;br>
+See the License for the specific language governing permissions and limitations under the License.</string>
+
+    <!-- android developer guide -->
+    <string name="lib_name_devGuide" translatable="false">Android API Guide</string>
+    <string name="lib_link_devGuide" translatable="false">&lt;a href="http://developer.android.com/guide/components/index.html">http://developer.android.com/guide/components/index.html&lt;/a></string>
+    <string name="lib_note_devGuide" translatable="false">This app uses example code from the Android API guide. Quote from the guide:&lt;br/>&lt;br/>
+        Except as noted, this content is licensed under &lt;a href="http://www.apache.org/licenses/LICENSE-2.0">Apache 2.0&lt;/a>. For details and restrictions, see the &lt;a href="http://developer.android.com/license.html">Content License&lt;/a>.</string>
+
+    <!-- dropbox sdk -->
+    <string name="lib_name_dbSDK" translatable="false">Dropbox SDK for Android</string>
+    <string name="lib_link_dbSDK" translatable="false">&lt;a href="https://www.dropbox.com/developers/reference/sdk">https://www.dropbox.com/developers/reference/sdk&lt;/a></string>
+    <string name="lib_note_dbSDK" translatable="false" tools:ignore="TypographyOther">&lt;p>Copyright (c) 2009-2011 Dropbox Inc., http://www.dropbox.com/&lt;/p>
+
+&lt;p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:&lt;/p>
+
+&lt;p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.&lt;/p>
+
+&lt;p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.&lt;/p></string>
+
+    <!-- crouton -->
+    <string name="lib_name_crouton" translatable="false">Crouton</string>
+    <string name="lib_link_crouton" translatable="false">&lt;a href=&quot;https://github.com/keyboardsurfer/Crouton/&quot;>https://github.com/keyboardsurfer/Crouton/&lt;/a></string>
+    <string name="lib_note_crouton" translatable="false">&lt;p>&lt;p>
+Copyright 2012 - 2013 Benjamin Weiss&lt;br/>
+Copyright 2012 Neofonie Mobile GmbH&lt;/p>
+
+&lt;p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at&lt;/p>
+&lt;a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0&lt;/a>
+ 
+&lt;p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.&lt;/p>.</string>
+
+</resources>

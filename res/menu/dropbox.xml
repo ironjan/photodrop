@@ -3,6 +3,8 @@
 
     <item
         android:id="@+id/mnuDropboxUnlink"
+        android:orderInCategory="95"
+        android:showAsAction="never"
         android:title="@string/unlinkDropbox">
     </item>
 

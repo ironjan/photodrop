@@ -8,14 +8,21 @@ import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.OptionsItem;
+import com.googlecode.androidannotations.annotations.OptionsMenu;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 @EActivity(R.layout.act_authentification)
+@OptionsMenu(R.menu.main)
 public class StartActivity extends SherlockActivity {
 
 	private static final String TAG = StartActivity.class.getSimpleName();
 	
+	@OptionsItem(R.id.mnuAbout)
+	void mnuAboutClicked(){
+		OSLibsActivity_.intent(this).start();
+	}
 	@Bean
 	SessionKeeper sessionKeeper;
 	
