@@ -1,28 +1,43 @@
 package com.github.ironjan.photodrop.fragments;
 
-import android.widget.ArrayAdapter;
+import android.database.DataSetObserver;
+import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.StartActivity_;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
+import com.googlecode.androidannotations.annotations.ViewById;
 
 @EFragment
 @OptionsMenu(R.menu.dropbox)
 public class StreamFragment extends SherlockListFragment {
+
 	@Bean
 	SessionKeeper sessionKeeper;
 
+	@Bean
+	PostListAdapter postLA;
+
+	@ViewById
+	ListView list;
+
 	@AfterViews
 	void showSomeContent() {
-		String[] content = "Stream fragments list is filled with text".split(" "); //$NON-NLS-1$//$NON-NLS-2$
-		setListAdapter(new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, content));
+		setListAdapter(postLA);
+		postLA.registerDataSetObserver(new DataSetObserver() {
+			@Override
+			public void onChanged() {
+				super.onChanged();
+				invalidateList();
+			}
+		});
 	}
 
 	@OptionsItem(R.id.mnuDropboxUnlink)
@@ -30,4 +45,9 @@ public class StreamFragment extends SherlockListFragment {
 		sessionKeeper.unlink();
 		StartActivity_.intent(getActivity()).start();
 	}
+
+	void invalidateList() {
+		list.invalidate();
+	}
+
 }
