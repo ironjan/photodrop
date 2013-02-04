@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RM</string>
+
+    <string name="app_name">Photodrop</string>
+
+    <!-- Dropbox -->
+    <string name="linkDropbox">Link with Dropbox</string>
+    <string name="unlinkDropbox">Unlink from Dropbox</string>
+    <string name="explanationDropbox">This app uses Dropbox to share your pictures with others. It cannot be used without granting permission to your Dropbox.</string>
+    <string name="authentificationNoInternet">You have to be connected to the internet to start the authentification.</string>
+    <string name="authentificationError">There was an error. Please try again.</string>
+    <string name="authentificationSuccessful">Authentification was successful. You are now linked to Dropbox.</string>
+    <string name="dropboxUnlinkSucces">You successfully unlinked this app from Dropbox.</string>
+
 </resources>
