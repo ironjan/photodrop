@@ -15,5 +15,7 @@
     <!-- menu items -->
     <string name="refresh">Refresh</string>
     <string name="about">About</string>
+    <string name="takePhoto">Take Photo</string>
+    <string name="chooseExisting">Choose existing</string>
 
 </resources>
