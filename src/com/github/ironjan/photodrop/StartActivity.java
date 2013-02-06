@@ -34,6 +34,7 @@ public class StartActivity extends SherlockActivity {
 			CroutonW.showAlert(this, e);
 		}
 	}
+	
 
 	@Override
 	protected void onResume() {

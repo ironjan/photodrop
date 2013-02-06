@@ -5,8 +5,8 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.github.ironjan.photodrop.OSLibsActivity_;
+import com.github.ironjan.photodrop.PrefActivity_;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.StartActivity_;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
@@ -20,9 +20,9 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 @EFragment
-@OptionsMenu({ R.menu.dropbox, R.menu.main })
+@OptionsMenu(R.menu.main)
 public class StreamFragment extends SherlockListFragment {
-
+ 
 	@SuppressWarnings("nls")
 	private static final String NYI = "Not yet implemented";
 
@@ -51,12 +51,6 @@ public class StreamFragment extends SherlockListFragment {
 		list.invalidate();
 	}
 
-	@OptionsItem(R.id.mnuDropboxUnlink)
-	void unlinkDropbox() {
-		sessionKeeper.unlink();
-		StartActivity_.intent(getActivity()).start();
-	}
-
 	@OptionsItem(R.id.mnuPhoto)
 	void takePhoto() {
 		CroutonW.showInfo(getActivity(), NYI);
@@ -67,6 +61,11 @@ public class StreamFragment extends SherlockListFragment {
 		CroutonW.showInfo(getActivity(), NYI);
 	}
 
+	@OptionsItem(R.id.mnuSettings)
+	void mnuSettingsClicked() {
+		PrefActivity_.intent(getActivity()).start();
+	}
+	
 	@OptionsItem(R.id.mnuAbout)
 	void mnuAboutClicked() {
 		OSLibsActivity_.intent(getActivity()).start();

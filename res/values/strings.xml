@@ -17,5 +17,8 @@
     <string name="about">About</string>
     <string name="takePhoto">Take Photo</string>
     <string name="chooseExisting">Choose existing</string>
+    <string name="automatic_synchronisation">Automatic synchronisation</string>
+    <string name="sync_interval">Sync interval (minutes)</string>
+    <string name="settings">Settings</string>
 
 </resources>

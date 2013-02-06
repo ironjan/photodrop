@@ -4,19 +4,16 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.StartActivity_;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.FromHtml;
-import com.googlecode.androidannotations.annotations.OptionsItem;
-import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
 
 @EFragment(R.layout.frgmt_os_libs)
-@OptionsMenu(R.menu.dropbox)
 public class OSLibsFragment extends SherlockFragment {
 
+	
 	@ViewById(R.id.libNameAA)
 	@FromHtml(R.string.lib_name_aa)
 	TextView libNameAA;
@@ -103,11 +100,5 @@ public class OSLibsFragment extends SherlockFragment {
 
 	@Bean
 	SessionKeeper sessionKeeper;
-
-	@OptionsItem(R.id.mnuDropboxUnlink)
-	void unlinkDropbox() {
-		sessionKeeper.unlink();
-		StartActivity_.intent(getActivity()).start();
-	}
 
 }

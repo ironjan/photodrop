@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <Button
+        android:id="@+id/btnUnlink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/unlinkDropbox" />
+
+    <ToggleButton
+        android:id="@+id/tglAutomaticSync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnUnlink"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/txtAutomaticSyncDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tglAutomaticSync"
+        android:layout_alignBottom="@+id/tglAutomaticSync"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/tglAutomaticSync"
+        android:text="@string/automatic_synchronisation"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/txtSyncInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tglAutomaticSync"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tglAutomaticSync"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="number" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/txtSyncIntervalDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtSyncInterval"
+        android:layout_alignBottom="@+id/txtSyncInterval"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/txtAutomaticSyncDescription"
+        android:text="@string/sync_interval"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

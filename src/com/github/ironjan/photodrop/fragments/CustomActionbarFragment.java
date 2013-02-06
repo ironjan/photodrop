@@ -16,6 +16,7 @@ import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
 public class CustomActionbarFragment extends SherlockFragment{
+	
 	private static final com.actionbarsherlock.app.ActionBar.LayoutParams sCustomABLayoutParams = new ActionBar.LayoutParams(
 			Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 
