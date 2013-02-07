@@ -13,5 +13,6 @@ public interface Prefs {
 	@DefaultBoolean(true)
 	public boolean automaticSync();
 	
-	
+	@DefaultBoolean(true)
+	public boolean syncOnlyOnWifi();
 }

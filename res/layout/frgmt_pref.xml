@@ -33,20 +33,6 @@
         android:text="@string/automatic_synchronisation"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/txtSyncInterval"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tglAutomaticSync"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tglAutomaticSync"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="number" >
-
-        <requestFocus />
-    </EditText>
-
     <TextView
         android:id="@+id/txtSyncIntervalDescription"
         android:layout_width="wrap_content"
@@ -56,6 +42,33 @@
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/txtAutomaticSyncDescription"
         android:text="@string/sync_interval"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ToggleButton
+        android:id="@+id/tglSyncOnlyWifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tglAutomaticSync" />
+
+    <EditText
+        android:id="@+id/txtSyncInterval"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tglSyncOnlyWifi"
+        android:layout_below="@+id/tglSyncOnlyWifi"
+        android:ems="10"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/txtSyncOnlyWifiDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tglSyncOnlyWifi"
+        android:layout_alignBottom="@+id/tglSyncOnlyWifi"
+        android:layout_alignLeft="@+id/txtAutomaticSyncDescription"
+        android:layout_alignRight="@+id/txtSyncIntervalDescription"
+        android:text="@string/sync_only_on_wifi"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

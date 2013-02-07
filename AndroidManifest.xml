@@ -56,6 +56,10 @@
             android:name="OSLibsActivity_"
             android:label="@string/app_name"
             android:parentActivityName="StartActivity_" />
+        <activity
+            android:name="PrefActivity_"
+            android:label="@string/app_name"
+            android:parentActivityName="StartActivity_" />
     </application>
 
 </manifest>
