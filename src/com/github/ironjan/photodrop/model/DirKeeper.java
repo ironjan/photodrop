@@ -1,6 +1,8 @@
 package com.github.ironjan.photodrop.model;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import android.content.Context;
 import android.os.Build;
@@ -35,9 +37,13 @@ public class DirKeeper {
 		return mExternalStorageAvailable;
 	}
 
+	/**
+	 * @return the external directory to save the files of this app. null if external storage not available
+	 */
 	public File getExtFilesDir() {
 		if (!isExtStorageAvailable()) {
 			Log.w(TAG, Environment.getExternalStorageState());
+			return null;
 		}
 
 		if (SDK_INT >= FROYO) {
@@ -74,6 +80,19 @@ public class DirKeeper {
 		} else {
 			mExternalStorageAvailable = false;
 		}
+	}
+
+	public File createNewPhotofile() {
+		final File dir = getExtFilesDir();
+		
+		File f = new File(dir, createFileName());
+		
+		return f;
+	}
+
+	private String createFileName() {
+		// todo create with simple date 
+		return String.format(Locale.GERMAN, "%s.jpg", Long.valueOf(System.currentTimeMillis())); //$NON-NLS-1$
 	}
 
 }

@@ -1,14 +1,21 @@
 package com.github.ironjan.photodrop.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.github.ironjan.photodrop.OSLibsActivity_;
 import com.github.ironjan.photodrop.PrefActivity_;
 import com.github.ironjan.photodrop.R;
+import com.github.ironjan.photodrop.ShareActivity_;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.model.DirKeeper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -22,9 +29,20 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 @EFragment
 @OptionsMenu(R.menu.main)
 public class StreamFragment extends SherlockListFragment {
- 
+
+	@SuppressWarnings("nls")
+	private static final String sImageContentType = "image/*";
+
 	@SuppressWarnings("nls")
 	private static final String NYI = "Not yet implemented";
+
+	private static final int TAKE_REQUEST_CODE = 0;
+
+	private static final int CHOOSE_REQUEST_CODE = 1;
+
+	private static final int SHARE_PHOTO_REQUEST = 2;
+
+	private static final String TAG = StreamFragment.class.getSimpleName();
 
 	@Bean
 	SessionKeeper sessionKeeper;
@@ -34,6 +52,10 @@ public class StreamFragment extends SherlockListFragment {
 
 	@ViewById
 	ListView list;
+	@Bean
+	DirKeeper mDirKeeper;
+
+	private Uri mUri;
 
 	@AfterViews
 	void showSomeContent() {
@@ -53,19 +75,73 @@ public class StreamFragment extends SherlockListFragment {
 
 	@OptionsItem(R.id.mnuPhoto)
 	void takePhoto() {
-		CroutonW.showInfo(getActivity(), NYI);
+		// todo grey out wihtout camera
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		mUri = Uri.fromFile(mDirKeeper.createNewPhotofile());
+		Log.w(TAG, String.format("%s",mUri));
+		if(mUri != null){
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+		startActivityForResult(intent, TAKE_REQUEST_CODE);
+		}
+		else{
+			CroutonW.showAlert(getSherlockActivity(), "Can not take photo right now");
+		}
 	}
 
 	@OptionsItem(R.id.mnuChoose)
 	void chooseExistingPicture() {
 		CroutonW.showInfo(getActivity(), NYI);
+		// TODO Intent intent = createChooseExistingIntent();
+		// startActivityForResult(intent, CHOOSE_REQUEST_CODE);
+	}
+
+	private static Intent createChooseExistingIntent() {
+		Intent intent = new Intent();
+		intent.setType(sImageContentType);
+		intent.setAction(Intent.ACTION_GET_CONTENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		return intent;
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+		case CHOOSE_REQUEST_CODE:
+			resultChooseExisting(resultCode, data);
+			break;
+		case TAKE_REQUEST_CODE:
+			resultTakePhoto(resultCode);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void resultChooseExisting(int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void resultTakePhoto(int resultCode) {
+		if (resultCode == Activity.RESULT_OK) {
+			sharePhoto();
+		}
+	}
+
+	/**
+	 * This method creates an intent with uri-extra <code>mUri</code> to
+	 * NewPostActivity.
+	 */
+	private void sharePhoto() {
+		ShareActivity_.intent(getSherlockActivity()).photoUri("" + mUri)
+				.startForResult(SHARE_PHOTO_REQUEST);
 	}
 
 	@OptionsItem(R.id.mnuSettings)
 	void mnuSettingsClicked() {
 		PrefActivity_.intent(getActivity()).start();
 	}
-	
+
 	@OptionsItem(R.id.mnuAbout)
 	void mnuAboutClicked() {
 		OSLibsActivity_.intent(getActivity()).start();
