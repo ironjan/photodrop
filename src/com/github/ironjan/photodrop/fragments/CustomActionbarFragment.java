@@ -84,6 +84,7 @@ public class CustomActionbarFragment extends SherlockFragment{
 	@Background
 	void doSomeCounting() {
 		long start = System.currentTimeMillis();
+		@SuppressWarnings("unused")
 		long counter = 0;
 		while ((System.currentTimeMillis() - start) < 5000) {
 			counter++;

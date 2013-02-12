@@ -20,8 +20,9 @@ public class DirKeeper {
 	private static final int FROYO = Build.VERSION_CODES.FROYO;
 	private static final int SDK_INT = Build.VERSION.SDK_INT;
 
-	private static final String packageName = StreamActivity.class.getPackage().getName();
-	
+	private static final String packageName = StreamActivity.class.getPackage()
+			.getName();
+
 	@SuppressWarnings("nls")
 	private static final String APP_FOLDER_PATH = "/Android/data/"
 			+ packageName + "/files/";
@@ -36,7 +37,8 @@ public class DirKeeper {
 	}
 
 	/**
-	 * @return the external directory to save the files of this app. null if external storage not available
+	 * @return the external directory to save the files of this app. null if
+	 *         external storage not available
 	 */
 	public File getExtFilesDir() {
 		if (!isExtStorageAvailable()) {
@@ -82,15 +84,16 @@ public class DirKeeper {
 
 	public File createNewPhotofile() {
 		final File dir = getExtFilesDir();
-		
+
 		File f = new File(dir, createFileName());
-		
+
 		return f;
 	}
 
-	private String createFileName() {
-		// todo create with simple date 
-		return String.format(Locale.GERMAN, "%s.jpg", Long.valueOf(System.currentTimeMillis())); //$NON-NLS-1$
+	private static String createFileName() {
+		// todo create with simple date
+		return String.format(Locale.GERMAN,
+				"%s.jpg", Long.valueOf(System.currentTimeMillis())); //$NON-NLS-1$
 	}
 
 }

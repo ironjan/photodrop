@@ -15,6 +15,7 @@
     <string name="picturesDir" translatable="false">Pictures/</string>
     <string name="feedback_mail_address" translatable="false">lippertsjan@gmail.com</string>
     <string name="bug_report_mail_address" translatable="false">lippertsjan@gmail.com</string>
+    <string name="noPhotoRightNow">There\'s something wrong. Can not take photo right now</string>
 
     <!-- Dropbox -->
     <string name="linkDropbox">Link with Dropbox</string>

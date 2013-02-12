@@ -24,6 +24,7 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.googlecode.androidannotations.annotations.res.StringRes;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
@@ -34,9 +35,6 @@ public class StreamFragment extends SherlockListFragment {
 	@SuppressWarnings("nls")
 	private static final String sImageContentType = "image/*";
 
-	@SuppressWarnings("nls")
-	private static final String NYI = "Not yet implemented";
-
 	private static final int TAKE_REQUEST_CODE = 0;
 
 	private static final int CHOOSE_REQUEST_CODE = 1;
@@ -45,9 +43,13 @@ public class StreamFragment extends SherlockListFragment {
 
 	private static final String TAG = StreamFragment.class.getSimpleName();
 
+
 	@Bean
 	SessionKeeper sessionKeeper;
 
+	@StringRes
+	String noPhotoRightNow;
+	
 	@Bean
 	PostListAdapter postLA;
 
@@ -85,7 +87,7 @@ public class StreamFragment extends SherlockListFragment {
 			startActivityForResult(intent, TAKE_REQUEST_CODE);
 		} else {
 			CroutonW.showAlert(getSherlockActivity(),
-					"Can not take photo right now");
+					noPhotoRightNow); 
 		}
 	}
 
