@@ -2,9 +2,7 @@ package com.github.ironjan.photodrop.fragments;
 
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +13,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.helper.ImageStorage;
+import com.github.ironjan.photodrop.helper.LocBeanCallback;
 import com.github.ironjan.photodrop.helper.LocationBean;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -25,7 +24,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.DrawableRes;
 
 @EFragment(R.layout.frgmt_share)
-public class ShareFragment extends SherlockFragment {
+public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 
 	private String mUri;
 
@@ -50,7 +49,9 @@ public class ShareFragment extends SherlockFragment {
 	@Bean
 	ImageStorage mImageStorage;
 
-	// todo load image etc
+	@Bean
+	LocationBean mLocationBean;
+
 	public void setUri(String uri) {
 		this.mUri = uri;
 		if (mAfterViews) {
@@ -66,39 +67,6 @@ public class ShareFragment extends SherlockFragment {
 			progress.setVisibility(View.GONE);
 		}
 	}
-
-	private LocationListener locationListener = new LocationListener() {
-
-		private Location mCurrentBestLocation;
-
-		@Override
-		public void onLocationChanged(Location location) {
-			final Location oldBest = mCurrentBestLocation;
-			mCurrentBestLocation = LocationBean.getBetterLocation(
-					mCurrentBestLocation, location);
-			if (mCurrentBestLocation != oldBest) {
-				updateBestLocation(location);
-			}
-		}
-
-		private void updateBestLocation(Location location) {
-			this.mCurrentBestLocation = location;
-			updateLocation(location);
-		}
-
-		@Override
-		public void onProviderDisabled(String provider) {/**/
-		}
-
-		@Override
-		public void onProviderEnabled(String provider) {/**/
-		}
-
-		@Override
-		public void onStatusChanged(String provider, int status, Bundle extras) {/**/
-		}
-
-	};
 
 	private Location mLocation;
 
@@ -117,7 +85,7 @@ public class ShareFragment extends SherlockFragment {
 	}
 
 	private void removeLocation() {
-		locMan.removeUpdates(locationListener);
+		mLocationBean.stopListening();
 		btnLocation.setImageDrawable(ic_location_off_dark);
 		mLocation = null;
 		txtLocation.setText(""); //$NON-NLS-1$
@@ -125,16 +93,13 @@ public class ShareFragment extends SherlockFragment {
 	}
 
 	private void addLocation() {
-		locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-				locationListener);
-		locMan.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-				locationListener);
-
+		mLocationBean.startListening(this);
 		btnLocation.setImageDrawable(ic_location_searching_dark);
 		mLocationIsAdded = true;
 	}
 
-	protected void updateLocation(Location location) {
+	@Override
+	public void updateLocation(Location location) {
 		if (mLocationIsAdded) {
 			mLocation = location;
 			btnLocation.setImageDrawable(ic_location_found_dark);

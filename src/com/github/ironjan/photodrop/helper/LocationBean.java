@@ -1,6 +1,12 @@
 package com.github.ironjan.photodrop.helper;
 
+import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.SystemService;
+
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 
 /* 
  from http://developer.android.com/guide/topics/location/strategies.html 
@@ -18,7 +24,33 @@ import android.location.Location;
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-public class LocationBean {
+@EBean
+public class LocationBean implements LocationListener {
+	@SystemService
+	LocationManager mLocationManager;
+	private LocBeanCallback mCallback = mDummyCallback;
+
+	private static final LocBeanCallback mDummyCallback = new LocBeanCallback() {
+
+		@Override
+		public void updateLocation(Location loc) {
+			// dummy
+		}
+	};
+
+	public void startListening(LocBeanCallback callback) {
+		this.mCallback = callback;
+		mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				0, 0, this);
+		mLocationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 0, 0, this);
+	}
+
+	public void stopListening() {
+		this.mCallback = mDummyCallback;
+		mLocationManager.removeUpdates(this);
+	}
+
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 
 	public static Location getBetterLocation(Location location1,
@@ -86,5 +118,34 @@ public class LocationBean {
 			return location2 == null;
 		}
 		return location1.getProvider().equals(location2.getProvider());
+	}
+
+	private Location mCurrentBestLocation;
+
+	@Override
+	public void onLocationChanged(Location location) {
+		final Location oldBest = mCurrentBestLocation;
+		mCurrentBestLocation = LocationBean.getBetterLocation(
+				mCurrentBestLocation, location);
+		if (mCurrentBestLocation != oldBest) {
+			updateBestLocation(location);
+		}
+	}
+
+	private void updateBestLocation(Location location) {
+		this.mCurrentBestLocation = location;
+		mCallback.updateLocation(location);
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {/**/
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {/**/
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {/**/
 	}
 }
