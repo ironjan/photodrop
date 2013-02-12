@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -41,12 +42,14 @@ public class PostMetadata {
 	@SuppressLint("DefaultLocale")
 	public String toFileContent() {
 		return String
-				.format("%s%f\n%s%f\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
+				.format(Locale.US,"%s%f\n%s%f\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
 	}
 
 	public static PostMetadata fromFile(File f) {
 		try {
 			final FileReader fileReader = new FileReader(f);
+			Log.v(TAG,
+					String.format("Reading metadata from file %s", f.getPath())); //$NON-NLS-1$
 			BufferedReader br = new BufferedReader(fileReader);
 
 			final String latitudeString = br.readLine().substring(

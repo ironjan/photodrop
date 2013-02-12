@@ -1,13 +1,15 @@
 package com.github.ironjan.photodrop.persistence;
 
+
+
 public class Post {
 	public final PostMetadata metadata;
-	public final String imageUri;
+	public final String imagePath;
 
-	Post(PostMetadata metadata, String imageUri) {
+	Post(PostMetadata metadata, String photoPath) {
 		super();
-		this.metadata = metadata;
-		this.imageUri = imageUri;
+		this.metadata = metadata;		
+		this.imagePath = photoPath;
 	}
 
 }

@@ -5,13 +5,17 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.github.ironjan.photodrop.persistence.Post;
 import com.github.ironjan.photodrop.persistence.PostCreator;
+import com.github.ironjan.photodrop.views.PostView;
+import com.github.ironjan.photodrop.views.PostView_;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -21,6 +25,8 @@ import com.googlecode.androidannotations.annotations.UiThread;
 
 @EBean
 public class PostListAdapter extends BaseAdapter implements DirObserverCallback {
+	private static final String TAG = PostListAdapter.class.getSimpleName();
+
 	@RootContext
 	Context context;
 
@@ -44,7 +50,7 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	private void loadDirContent() {
 		File filesDir = mDirKeeper.getExtFilesDir();
-		
+
 		File[] files = filesDir.listFiles();
 
 		for (File file : files) {
@@ -59,9 +65,9 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 	}
 
 	@Override
-	public String getItem(int position) {
+	public Post getItem(int position) {
 		final Object key = mPosts.keySet().toArray()[position];
-		return String.format("%s : %s", key, mPosts.get(key)); //$NON-NLS-1$
+		return mPosts.get(key);
 	}
 
 	@Override
@@ -71,16 +77,22 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView tv;
-
+		PostView pv;
 		if (convertView == null) {
-			tv = new TextView(context);
-			convertView = tv;
+			pv = PostView_.build(context);
 		} else {
-			tv = (TextView) convertView;
+			pv = (PostView) convertView;
 		}
-		tv.setText(getItem(position).toString());
-		return tv;
+
+		Post p = getItem(position);
+		pv.bind(p);
+		return pv;
+	}
+
+	@SuppressWarnings("static-method")
+	@UiThread
+	void imageLoaded(ImageView imageView, final Bitmap bm) {
+		imageView.setImageBitmap(bm);
 	}
 
 	@Override
@@ -103,6 +115,8 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	@Override
 	public void fileDeleted(String path) {
+		Log.v(TAG, String.format(
+				"%s has been deleted. Removed from displayed posts", path));
 		String tPath = path;
 		if (!tPath.endsWith(".meta")) {//$NON-NLS-1$
 			tPath = tPath.concat(".meta");//$NON-NLS-1$

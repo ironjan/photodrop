@@ -77,4 +77,8 @@ public class DirObserver {
 		this.mCallback = callback;
 	}
 
+	public void stopWatching() {
+		mObserver.stopWatching();
+	}
+
 }

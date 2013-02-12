@@ -9,14 +9,18 @@ import android.widget.ImageButton;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.crouton.CroutonW;
+import com.github.ironjan.photodrop.dbwrap.DownSyncCallback;
+import com.github.ironjan.photodrop.dbwrap.Syncer;
+import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
+import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
-public class CustomActionbarFragment extends SherlockFragment{
-	
+public class CustomActionbarFragment extends SherlockFragment implements
+		DownSyncCallback {
+
 	private static final com.actionbarsherlock.app.ActionBar.LayoutParams sCustomABLayoutParams = new ActionBar.LayoutParams(
 			Gravity.CENTER_VERTICAL | Gravity.RIGHT);
 
@@ -25,6 +29,9 @@ public class CustomActionbarFragment extends SherlockFragment{
 	private View mCustomABRefresh;
 
 	private View mCustumABProgress;
+
+	@Bean
+	Syncer mSyncer;
 
 	private ActionBar mActionBar;
 
@@ -37,13 +44,13 @@ public class CustomActionbarFragment extends SherlockFragment{
 		super.onCreate(savedInstanceState);
 	}
 
-	void initCustomABViews(Bundle savedInstanceState) {
+	private void initCustomABViews(Bundle savedInstanceState) {
 		final LayoutInflater inflater = getLayoutInflater(savedInstanceState);
 		mCustomABRefresh = inflater.inflate(R.layout.actionbar_refresh, null);
 		mCustumABProgress = inflater.inflate(R.layout.actionbar_progress, null);
 	}
 
-	ActionBar initCustomActionBar() {
+	private ActionBar initCustomActionBar() {
 		mActionBar = getSherlockActivity().getSupportActionBar();
 		mActionBar.setCustomView(mCustomABRefresh, sCustomABLayoutParams);
 		mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
@@ -55,6 +62,10 @@ public class CustomActionbarFragment extends SherlockFragment{
 		return mActionBar;
 	}
 
+	@AfterInject
+	void setDownSyncCallback(){
+		mSyncer.setDownSyncCallback(this);
+	}
 	void setupCustomActionBarOnClick() {
 		// we need to set up click listener because btnRefresh is not found by
 		// AndroidAnnotations
@@ -70,31 +81,25 @@ public class CustomActionbarFragment extends SherlockFragment{
 		}
 	}
 
+	@Background
 	void refresh() {
-		CroutonW.showInfo(getActivity(), "showing progress for nothing..."); //$NON-NLS-1$
 		showProgressInAB();
+		mSyncer.forceDownSync();
 	}
 
 	@UiThread
 	void showProgressInAB() {
 		mActionBar.setCustomView(mCustumABProgress, sCustomABLayoutParams);
-		doSomeCounting();
-	}
-
-	@Background
-	void doSomeCounting() {
-		long start = System.currentTimeMillis();
-		@SuppressWarnings("unused")
-		long counter = 0;
-		while ((System.currentTimeMillis() - start) < 5000) {
-			counter++;
-		}
-		showRefreshInAB();
 	}
 
 	@UiThread
 	void showRefreshInAB() {
 		mActionBar.setCustomView(mCustomABRefresh, sCustomABLayoutParams);
+	}
+
+	@Override
+	public void syncFinished() {
+		showRefreshInAB();
 	}
 
 }

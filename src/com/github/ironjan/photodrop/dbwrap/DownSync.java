@@ -12,6 +12,13 @@ import com.googlecode.androidannotations.api.Scope;
 @EBean(scope = Scope.Singleton)
 class DownSync {
 
+	private static final DownSyncCallback mDummyCallback = new DownSyncCallback() {
+
+		@Override
+		public void syncFinished() { /* dummy */
+		}
+	};
+
 	@Bean
 	ConnectionBean cb;
 
@@ -23,6 +30,8 @@ class DownSync {
 	private Object mCleanUpFinished;
 
 	private Object mUpdateFinished;
+
+	private DownSyncCallback mCallback = mDummyCallback;
 
 	public void autoSync() {
 		if (doesNotMeetAutoSyncConditions()) {
@@ -81,6 +90,7 @@ class DownSync {
 			mUpdateFinished = null;
 			mCleanUpFinished = null;
 			mIsSyncing = false;
+			mCallback.syncFinished();
 		}
 	}
 
@@ -115,5 +125,9 @@ class DownSync {
 	}
 
 	class CleanUpResult {
+	}
+
+	public void setCallback(DownSyncCallback callback) {
+		this.mCallback = callback;
 	}
 }

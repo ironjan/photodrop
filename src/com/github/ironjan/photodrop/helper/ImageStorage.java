@@ -167,7 +167,9 @@ public class ImageStorage {
 			return Uri.parse(filePath.toString().replace(
 					"content://com.android.gallery3d", picasaPostHC));//$NON-NLS-1$
 		}
-
+		else if (filePath.startsWith("/")) {
+			return Uri.parse("file://"+filePath);
+		}
 		return Uri.parse(filePath);
 	}
 
@@ -181,7 +183,7 @@ public class ImageStorage {
 	}
 
 	@Trace
-	public Bitmap getThumbnail(String filePath) {
+	public synchronized Bitmap getThumbnail(String filePath) {
 		Bitmap scaledImage = ImageOperations.scaleKeepRatio(
 				getBitmap(filePath), 256, Integer.MAX_VALUE);
 		return scaledImage;

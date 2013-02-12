@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Log;
 
 import com.github.ironjan.photodrop.helper.ImageStorage;
@@ -31,6 +32,10 @@ public class PostCreator {
 	ImageStorage mImageStorage;
 
 	public Post fromMetadataFile(String metadataFilePath) {
+		if (!metadataFilePath.endsWith(".meta")) {
+			return null;
+		}
+
 		final String fullPath;
 		if (metadataFilePath.contains(mDirPath)) {
 			fullPath = metadataFilePath;
@@ -48,10 +53,7 @@ public class PostCreator {
 		boolean isValidPost = photoExists && hasMetadata;
 
 		if (isValidPost) {
-			String photoUri = String.format(
-					"%s", mImageStorage.reconstructUri(photoFilePath)); //$NON-NLS-1$
-
-			return new Post(metadata, photoUri);
+			return new Post(metadata, photoFilePath);
 		}
 
 		return null;
