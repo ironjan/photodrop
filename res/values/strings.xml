@@ -2,6 +2,19 @@
 <resources>
 
     <string name="app_name">Photodrop</string>
+    <string name="noPicasaSupport">Cannot yet load images from picasa</string>
+    <string name="picasaUrl" translatable="false">content://com.google.android.gallery3d.provider/picasa/</string>
+    <string name="mailType" translatable="false">plain/text</string>
+    <string name="imageType" translatable="false">image/*</string>
+    <string name="jpgSuffix" translatable="false">.jpg</string>
+    <string name="pngSuffix" translatable="false">.png</string>
+    <string name="txtSuffix" translatable="false">.txt</string>
+    <string name="photoNameScheme" translatable="false">yyyyMMdd_HHmmss</string>
+    <string name="picasaPreHC" translatable="false">content://com.android.gallery3d.provider</string>
+    <string name="picasaPostHC" translatable="false">content://com.google.android.gallery3d</string>
+    <string name="picturesDir" translatable="false">Pictures/</string>
+    <string name="feedback_mail_address" translatable="false">lippertsjan@gmail.com</string>
+    <string name="bug_report_mail_address" translatable="false">lippertsjan@gmail.com</string>
 
     <!-- Dropbox -->
     <string name="linkDropbox">Link with Dropbox</string>
@@ -11,6 +24,15 @@
     <string name="authentificationError">There was an error. Please try again.</string>
     <string name="authentificationSuccessful">Authentification was successful. You are now linked to Dropbox.</string>
     <string name="dropboxUnlinkSucces">You successfully unlinked this app from Dropbox.</string>
+    <string name="remoteDbFolder" translatable="false"> /ddiTest/</string>
+    <string name="unhandledExceptionLog" translatable="false">Something went wrong: </string>
+    <string name="dropboxExceptionUnknownCauseLog" translatable="false">Unknown error.  Try again.</string>
+    <string name="dropboxParseExceptionLog" translatable="false">Dropbox error.  Try again.</string>
+    <string name="dropboxNetworkExceptionLog" translatable="false">Network error.  Try again.</string>
+    <string name="dropboxUnlinkedExceptionLog" translatable="false">DropboxUnlinkedException. Need to unlink user.</string>
+    <string name="dropboxFileTooBig">This file is too big to upload</string>
+    <string name="dropboxPartialFileException">Upload/Download canceled.</string>
+    <string name="dropboxParseException">Dropbox error.  Try again.</string>
 
     <!-- menu items -->
     <string name="refresh">Refresh</string>

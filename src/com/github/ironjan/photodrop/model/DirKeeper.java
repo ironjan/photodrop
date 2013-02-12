@@ -1,7 +1,6 @@
 package com.github.ironjan.photodrop.model;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import android.content.Context;
@@ -9,7 +8,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
-import com.github.ironjan.photodrop.StartActivity_;
+import com.github.ironjan.photodrop.StreamActivity;
 import com.googlecode.androidannotations.annotations.EBean;
 import com.googlecode.androidannotations.annotations.RootContext;
 
@@ -21,9 +20,8 @@ public class DirKeeper {
 	private static final int FROYO = Build.VERSION_CODES.FROYO;
 	private static final int SDK_INT = Build.VERSION.SDK_INT;
 
-	private static final String packageName = StartActivity_.class.getPackage()
-			.getName();
-
+	private static final String packageName = StreamActivity.class.getPackage().getName();
+	
 	@SuppressWarnings("nls")
 	private static final String APP_FOLDER_PATH = "/Android/data/"
 			+ packageName + "/files/";

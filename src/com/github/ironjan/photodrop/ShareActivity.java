@@ -1,7 +1,7 @@
 package com.github.ironjan.photodrop;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.github.ironjan.photodrop.fragments.ShareFragment_;
+import com.github.ironjan.photodrop.fragments.ShareFragment;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.Extra;
@@ -13,7 +13,7 @@ public class ShareActivity extends SherlockFragmentActivity {
 	String photoUri;
 
 	@FragmentById(R.id.frgmtShare)
-	ShareFragment_ mFragment;
+	ShareFragment mFragment;
 
 	@AfterViews
 	void passData() {

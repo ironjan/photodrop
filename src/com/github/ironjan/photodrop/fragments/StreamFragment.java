@@ -18,6 +18,7 @@ import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.DirKeeper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
@@ -78,29 +79,22 @@ public class StreamFragment extends SherlockListFragment {
 		// todo grey out wihtout camera
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		mUri = Uri.fromFile(mDirKeeper.createNewPhotofile());
-		Log.w(TAG, String.format("%s",mUri));
-		if(mUri != null){
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
-		startActivityForResult(intent, TAKE_REQUEST_CODE);
-		}
-		else{
-			CroutonW.showAlert(getSherlockActivity(), "Can not take photo right now");
+		Log.w(TAG, String.format("%s", mUri)); //$NON-NLS-1$
+		if (mUri != null) {
+			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
+			startActivityForResult(intent, TAKE_REQUEST_CODE);
+		} else {
+			CroutonW.showAlert(getSherlockActivity(),
+					"Can not take photo right now");
 		}
 	}
 
 	@OptionsItem(R.id.mnuChoose)
 	void chooseExistingPicture() {
-		CroutonW.showInfo(getActivity(), NYI);
-		// TODO Intent intent = createChooseExistingIntent();
-		// startActivityForResult(intent, CHOOSE_REQUEST_CODE);
-	}
-
-	private static Intent createChooseExistingIntent() {
-		Intent intent = new Intent();
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 		intent.setType(sImageContentType);
-		intent.setAction(Intent.ACTION_GET_CONTENT);
 		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		return intent;
+		startActivityForResult(intent, CHOOSE_REQUEST_CODE);
 	}
 
 	@Override
@@ -118,10 +112,27 @@ public class StreamFragment extends SherlockListFragment {
 	}
 
 	private void resultChooseExisting(int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-
+		if (resultCode == Activity.RESULT_OK) {
+			mUri = extractChooseExistingUri(data);
+			copyImageToExtDir(mUri);
+			sharePhoto();
+		}
 	}
 
+	@Background 
+	void copyImageToExtDir(Uri uri) {
+		// todo implement
+	}
+
+	private static Uri extractChooseExistingUri(Intent data) {
+		Uri selectedImage = null;
+		if (data != null && data.getData() != null) {
+			selectedImage = data.getData();
+		}
+
+		return selectedImage;
+	}
+	
 	private void resultTakePhoto(int resultCode) {
 		if (resultCode == Activity.RESULT_OK) {
 			sharePhoto();
@@ -133,7 +144,7 @@ public class StreamFragment extends SherlockListFragment {
 	 * NewPostActivity.
 	 */
 	private void sharePhoto() {
-		ShareActivity_.intent(getSherlockActivity()).photoUri("" + mUri)
+		ShareActivity_.intent(getSherlockActivity()).photoUri(String.format("%s",  mUri)) //$NON-NLS-1$
 				.startForResult(SHARE_PHOTO_REQUEST);
 	}
 
