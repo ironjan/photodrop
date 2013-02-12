@@ -29,7 +29,7 @@ import com.googlecode.androidannotations.annotations.res.StringRes;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 @EFragment
-@OptionsMenu(R.menu.main)
+@OptionsMenu({R.menu.main,R.menu.stream})
 public class StreamFragment extends SherlockListFragment {
 
 	@SuppressWarnings("nls")

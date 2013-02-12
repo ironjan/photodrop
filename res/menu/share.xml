@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/mnuCancel"
+        android:icon="@drawable/ic_action_cancel_dark"
+        android:orderInCategory="10"
+        android:showAsAction="always"
+        android:title="@android:string/cancel"/>
+    <item
+        android:id="@+id/mnuShare"
+        android:icon="@drawable/ic_action_post_dark"
+        android:orderInCategory="20"
+        android:showAsAction="always"
+        android:title="Share"/>
+
+</menu>
