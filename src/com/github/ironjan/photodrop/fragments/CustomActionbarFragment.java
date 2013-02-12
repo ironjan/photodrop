@@ -35,17 +35,25 @@ public class CustomActionbarFragment extends SherlockFragment implements
 
 	private ActionBar mActionBar;
 
+	private Bundle mSavedInstanceState;
+
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		initCustomABViews(savedInstanceState);
+	public void onResume() {
+		initCustomABViews();
 		initCustomActionBar();
 		setupCustomActionBarOnClick();
 		setRetainInstance(true);
+		super.onResume();
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		this.mSavedInstanceState = savedInstanceState;
 		super.onCreate(savedInstanceState);
 	}
 
-	private void initCustomABViews(Bundle savedInstanceState) {
-		final LayoutInflater inflater = getLayoutInflater(savedInstanceState);
+	private void initCustomABViews() {
+		final LayoutInflater inflater = getLayoutInflater(mSavedInstanceState);
 		mCustomABRefresh = inflater.inflate(R.layout.actionbar_refresh, null);
 		mCustumABProgress = inflater.inflate(R.layout.actionbar_progress, null);
 	}
@@ -63,9 +71,10 @@ public class CustomActionbarFragment extends SherlockFragment implements
 	}
 
 	@AfterInject
-	void setDownSyncCallback(){
+	void setDownSyncCallback() {
 		mSyncer.setDownSyncCallback(this);
 	}
+
 	void setupCustomActionBarOnClick() {
 		// we need to set up click listener because btnRefresh is not found by
 		// AndroidAnnotations
