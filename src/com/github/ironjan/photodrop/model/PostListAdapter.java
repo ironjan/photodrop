@@ -54,7 +54,7 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 		File[] files = filesDir.listFiles();
 
 		for (File file : files) {
-			addPathToPosts(file.getPath());
+			updatePost(file.getPath());
 		}
 		notifyDataSetChanged();
 	}
@@ -101,13 +101,14 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 		if (!tPath.endsWith(".meta")) { //$NON-NLS-1$
 			tPath = tPath.concat(".meta");//$NON-NLS-1$
 		}
-		addPathToPosts(tPath);
+		updatePost(tPath);
 	}
 
-	void addPathToPosts(String tPath) {
+	void updatePost(String tPath) {
 		Post p = mPostCreator.fromMetadataFile(tPath);
 
 		if (p != null) {
+			mPosts.remove(tPath);
 			mPosts.put(tPath, p);
 			notifyDataSetChanged();
 		}
