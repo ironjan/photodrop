@@ -1,8 +1,6 @@
 package com.github.ironjan.photodrop.helper;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,16 +17,6 @@ import android.net.Uri;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.DropboxAPI.UploadRequest;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.exception.DropboxFileSizeException;
-import com.dropbox.client2.exception.DropboxIOException;
-import com.dropbox.client2.exception.DropboxParseException;
-import com.dropbox.client2.exception.DropboxPartialFileException;
-import com.dropbox.client2.exception.DropboxServerException;
-import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.DirKeeper;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -55,16 +43,10 @@ public class ImageStorage {
 
 	@StringRes
 	String picasaUrl, noPicasaSupport, photoNameScheme, picasaPreHC,
-			picasaPostHC, picturesDir, remoteDbFolder, unhandledExceptionLog,
-			dropboxExceptionUnknownCauseLog, dropboxParseException,
-			dropboxParseExceptionLog, dropboxNetworkExceptionLog,
-			dropboxUnlinkedExceptionLog, dropboxFileTooBig,
-			dropboxPartialFileException;
+			picasaPostHC, picturesDir;
 
 	@RootContext
 	Context context;
-
-	private DropboxAPI<AndroidAuthSession> mApi;
 
 	@Bean
 	SessionKeeper mSessionKeeper;
@@ -72,48 +54,7 @@ public class ImageStorage {
 	@Bean
 	DirKeeper dirKeeper;
 
-	void upload(File file) {
-		if (file == null) {
-			return;
-		}
-		String path = remoteDbFolder + file.getName();
-
-		try {
-			FileInputStream fis = new FileInputStream(file);
-
-			UploadRequest request = mApi.putFileOverwriteRequest(path, fis,
-					file.length(), null);
-
-			if (request != null) {
-				request.upload();
-			}
-			fis.close();
-
-		} catch (DropboxUnlinkedException e) {
-			Log.e(TAG, dropboxUnlinkedExceptionLog, e);
-		} catch (DropboxFileSizeException e) {
-			Log.e(TAG, dropboxFileTooBig, e);
-		} catch (DropboxPartialFileException e) {
-			Log.e(TAG, dropboxPartialFileException, e);
-		} catch (DropboxServerException e) {
-			Log.e(TAG, e.body.userError, e);
-		} catch (DropboxIOException e) {
-			Log.e(TAG, dropboxNetworkExceptionLog, e);
-			// Happens all the time, probably want to retry automatically.
-			// TODO retry
-		} catch (DropboxParseException e) {
-			// Probably due to Dropbox server restarting, should retry
-			Log.e(TAG, dropboxParseException, e);
-			// TODO retry
-		} catch (DropboxException e) {
-			// Unknown error
-			Log.e(TAG, dropboxExceptionUnknownCauseLog, e);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, e.getMessage(), e);
-		} catch (IOException e) {
-			Log.e(TAG, e.getMessage(), e);
-		}
-	}
+	
 
 	@Trace
 	public Bitmap getBitmap(String filePath) {
@@ -128,7 +69,7 @@ public class ImageStorage {
 		return image;
 	}
 
-	private File getImageFile(String filePath) {
+	public File getImageFile(String filePath) {
 		Uri imageUri = reconstructUri(filePath);
 
 		File imageFile = null;
@@ -221,7 +162,7 @@ public class ImageStorage {
 		return file;
 	}
 
-	private Uri reconstructUri(String filePath) {
+	public Uri reconstructUri(String filePath) {
 		if (filePath.startsWith(picasaPreHC)) {
 			return Uri.parse(filePath.toString().replace(
 					"content://com.android.gallery3d", picasaPostHC));//$NON-NLS-1$

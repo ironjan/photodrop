@@ -1,7 +1,8 @@
 package com.github.ironjan.photodrop.model;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import android.content.Context;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.github.ironjan.photodrop.persistence.Post;
+import com.github.ironjan.photodrop.persistence.PostCreator;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -18,9 +21,6 @@ import com.googlecode.androidannotations.annotations.UiThread;
 
 @EBean
 public class PostListAdapter extends BaseAdapter implements DirObserverCallback {
-	private static final Integer ZERO = Integer.valueOf(0);
-	HashMap<String, Integer> changesHM = new HashMap<String, Integer>();
-
 	@RootContext
 	Context context;
 
@@ -29,6 +29,10 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	@Bean
 	DirKeeper mDirKeeper;
+
+	@Bean
+	PostCreator mPostCreator;
+	private SortedMap<String, Post> mPosts = new TreeMap<String, Post>();
 
 	@AfterInject
 	@Background
@@ -40,23 +44,24 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	private void loadDirContent() {
 		File filesDir = mDirKeeper.getExtFilesDir();
-		String[] files = filesDir.list();
+		
+		File[] files = filesDir.listFiles();
 
-		for (String file : files) {
-			changesHM.put(file, ZERO);
+		for (File file : files) {
+			addPathToPosts(file.getPath());
 		}
 		notifyDataSetChanged();
 	}
 
 	@Override
 	public int getCount() {
-		return changesHM.size();
+		return mPosts.size();
 	}
 
 	@Override
 	public String getItem(int position) {
-		final Object key = changesHM.keySet().toArray()[position];
-		return String.format("%s : %s", key, changesHM.get(key)); //$NON-NLS-1$
+		final Object key = mPosts.keySet().toArray()[position];
+		return String.format("%s : %s", key, mPosts.get(key)); //$NON-NLS-1$
 	}
 
 	@Override
@@ -80,20 +85,29 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 
 	@Override
 	public void fileChanged(String path) {
-		Integer changes = changesHM.get(path);
-
-		if (changes == null) {
-			changes = ZERO;
-		} else {
-			changes = Integer.valueOf(changes.intValue() + 1);
+		String tPath = path;
+		if (!tPath.endsWith(".meta")) { //$NON-NLS-1$
+			tPath = tPath.concat(".meta");//$NON-NLS-1$
 		}
-		changesHM.put(path, changes);
-		notifyDataSetChanged();
+		addPathToPosts(tPath);
+	}
+
+	void addPathToPosts(String tPath) {
+		Post p = mPostCreator.fromMetadataFile(tPath);
+
+		if (p != null) {
+			mPosts.put(tPath, p);
+			notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public void fileDeleted(String path) {
-		changesHM.remove(path);
+		String tPath = path;
+		if (!tPath.endsWith(".meta")) {//$NON-NLS-1$
+			tPath = tPath.concat(".meta");//$NON-NLS-1$
+		}
+		mPosts.remove(tPath);
 		notifyDataSetChanged();
 	}
 
@@ -102,5 +116,5 @@ public class PostListAdapter extends BaseAdapter implements DirObserverCallback 
 	public void notifyDataSetChanged() {
 		super.notifyDataSetChanged();
 	}
-	
+
 }

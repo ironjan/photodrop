@@ -18,7 +18,6 @@ import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.DirKeeper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
@@ -81,7 +80,7 @@ public class StreamFragment extends SherlockListFragment {
 		// todo grey out wihtout camera
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		mUri = Uri.fromFile(mDirKeeper.createNewPhotofile());
-		Log.w(TAG, String.format("%s", mUri)); //$NON-NLS-1$
+		Log.w(TAG, String.format("Taking new photo, target uri: %s", mUri)); //$NON-NLS-1$
 		if (mUri != null) {
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
 			startActivityForResult(intent, TAKE_REQUEST_CODE);
@@ -116,15 +115,11 @@ public class StreamFragment extends SherlockListFragment {
 	private void resultChooseExisting(int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
 			mUri = extractChooseExistingUri(data);
-			copyImageToExtDir(mUri);
+			Log.v(TAG, String.format("Chose existing photo, uri: %s", mUri)); //$NON-NLS-1$
 			sharePhoto();
 		}
 	}
 
-	@Background 
-	void copyImageToExtDir(Uri uri) {
-		// todo implement
-	}
 
 	private static Uri extractChooseExistingUri(Intent data) {
 		Uri selectedImage = null;

@@ -22,6 +22,13 @@ public class SessionKeeper {
 
 	private static final String TAG = SessionKeeper.class.getSimpleName();
 
+	private DropboxAPI<AndroidAuthSession> mDBApi;
+
+	
+	public DropboxAPI<AndroidAuthSession> getmDBApi() {
+		return mDBApi;
+	}
+
 	@StringRes
 	String appKey, appSecret, authentificationNoInternet,
 			authentificationError;
@@ -41,8 +48,6 @@ public class SessionKeeper {
 
 		mDBApi = new DropboxAPI<AndroidAuthSession>(session);
 	}
-
-	private DropboxAPI<AndroidAuthSession> mDBApi;
 
 	public void startAuthentication(Context context) {
 		if (connectionBean.hasInternetConnection()) {
@@ -69,9 +74,13 @@ public class SessionKeeper {
 		}
 	}
 
+	/**
+	 * Unlinks the user.
+	 */
 	public void unlink() {
 		getSession().unlink();
 		dbKeys.clear();
+		
 	}
 
 	private void storeKeys(String key, String secret) {
