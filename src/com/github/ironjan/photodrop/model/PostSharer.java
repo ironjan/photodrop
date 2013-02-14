@@ -12,7 +12,6 @@ import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
-import com.github.ironjan.photodrop.dbwrap.Uploader;
 import com.github.ironjan.photodrop.helper.ImageStorage;
 import com.github.ironjan.photodrop.persistence.PostMetadata;
 import com.googlecode.androidannotations.annotations.Background;
@@ -26,9 +25,6 @@ public class PostSharer {
 	@Bean
 	DirKeeper mDirKeeper;
 
-	@Bean
-	Uploader mUploader;
-	
 	@Bean
 	ImageStorage mImageStorage;
 
@@ -61,9 +57,7 @@ public class PostSharer {
 		File photoFile = copyImageToDir(imageUri);
 		PostMetadata metadata = new PostMetadata(location, comment);
 		File metadataFile = saveMetadata(photoFile, metadata);
-		mUploader.addToUpload(photoFile);
-		mUploader.addToUpload(metadataFile);
-		mUploader.exec();
+		// FIXME use sync api to create file in db
 	}
 
 	private File saveMetadata(File photoFile, PostMetadata metadata) {

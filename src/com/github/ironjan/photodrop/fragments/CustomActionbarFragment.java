@@ -9,17 +9,14 @@ import android.widget.ImageButton;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.dbwrap.DownSyncCallback;
-import com.github.ironjan.photodrop.dbwrap.Syncer;
-import com.googlecode.androidannotations.annotations.AfterInject;
+import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
-public class CustomActionbarFragment extends SherlockFragment implements
-		DownSyncCallback {
+public class CustomActionbarFragment extends SherlockFragment  {
 
 	private static final com.actionbarsherlock.app.ActionBar.LayoutParams sCustomABLayoutParams = new ActionBar.LayoutParams(
 			Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -30,13 +27,13 @@ public class CustomActionbarFragment extends SherlockFragment implements
 
 	private View mCustumABProgress;
 
-	@Bean
-	Syncer mSyncer;
-
 	private ActionBar mActionBar;
 
 	private Bundle mSavedInstanceState;
 
+	@Bean
+	SessionKeeper mSessionKeeper;
+	
 	@Override
 	public void onResume() {
 		initCustomABViews();
@@ -70,10 +67,6 @@ public class CustomActionbarFragment extends SherlockFragment implements
 		return mActionBar;
 	}
 
-	@AfterInject
-	void setDownSyncCallback() {
-		mSyncer.setDownSyncCallback(this);
-	}
 
 	void setupCustomActionBarOnClick() {
 		// we need to set up click listener because btnRefresh is not found by
@@ -93,7 +86,7 @@ public class CustomActionbarFragment extends SherlockFragment implements
 	@Background
 	void refresh() {
 		showProgressInAB();
-		mSyncer.forceDownSync();
+		// todo down sync
 	}
 
 	@UiThread
@@ -104,11 +97,6 @@ public class CustomActionbarFragment extends SherlockFragment implements
 	@UiThread
 	void showRefreshInAB() {
 		mActionBar.setCustomView(mCustomABRefresh, sCustomABLayoutParams);
-	}
-
-	@Override
-	public void syncFinished() {
-		showRefreshInAB();
 	}
 
 }
