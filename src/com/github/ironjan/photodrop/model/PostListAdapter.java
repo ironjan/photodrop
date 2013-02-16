@@ -1,7 +1,6 @@
 package com.github.ironjan.photodrop.model;
 
 import java.util.List;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import android.content.Context;

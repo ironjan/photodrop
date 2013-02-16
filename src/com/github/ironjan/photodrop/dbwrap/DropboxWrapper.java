@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.ObjectInputStream.GetField;
 import java.util.List;
 
 import android.app.Activity;
@@ -122,8 +121,8 @@ public class DropboxWrapper {
 		mDbxFs.syncNowAndWait();
 	}
 
-	public List<DbxFileInfo> listFiles() throws DbxException{
+	public List<DbxFileInfo> listFiles() throws DbxException {
 		return getDropboxFilesystem().listFolder(DbxPath.ROOT);
 	}
-	
+
 }

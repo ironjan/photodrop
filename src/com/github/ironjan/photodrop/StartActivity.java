@@ -11,6 +11,7 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
+import com.googlecode.androidannotations.annotations.res.StringRes;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
@@ -20,13 +21,11 @@ public class StartActivity extends SherlockActivity {
 
 	public static final int REQUEST_LINK_TO_DBX = 0;
 
-	@OptionsItem(R.id.mnuAbout)
-	void mnuAboutClicked() {
-		OSLibsActivity_.intent(this).start();
-	}
-
 	@Bean
 	DropboxWrapper sessionKeeper;
+
+	@StringRes
+	String couldNotLinkMsg;
 
 	@Click(R.id.btnLink)
 	void startAuthentication() {
@@ -40,8 +39,7 @@ public class StartActivity extends SherlockActivity {
 	@OnActivityResult(REQUEST_LINK_TO_DBX)
 	void resultLink(int resultCode) {
 		if (resultCode != Activity.RESULT_OK) {
-			CroutonW.showAlert(this,
-					"Could not link to Dropbox. This app needs Dropbox access to work");
+			CroutonW.showAlert(this, couldNotLinkMsg);
 		}
 	}
 
@@ -60,4 +58,8 @@ public class StartActivity extends SherlockActivity {
 		Crouton.cancelAllCroutons();
 	}
 
+	@OptionsItem(R.id.mnuAbout)
+	void mnuAboutClicked() {
+		OSLibsActivity_.intent(this).start();
+	}
 }

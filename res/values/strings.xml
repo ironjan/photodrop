@@ -3,7 +3,8 @@
 
     <string name="app_name">Photodrop</string>
     <string name="nyi">Not yet implemented.</string>
-    <string name="noPicasaSupport">Cannot yet load images from picasa</string>
+    <string name="couldNotLinkMsg">Could not link to Dropbox. This app needs Dropbox access to work</string><string name="noPicasaSupport">Cannot yet load images from picasa</string>
+
     <string name="picasaUrl" translatable="false">content://com.google.android.gallery3d.provider/picasa/</string>
     <string name="mailType" translatable="false">plain/text</string>
     <string name="imageType" translatable="false">image/*</string>

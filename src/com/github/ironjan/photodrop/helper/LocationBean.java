@@ -1,12 +1,12 @@
 package com.github.ironjan.photodrop.helper;
 
-import com.googlecode.androidannotations.annotations.EBean;
-import com.googlecode.androidannotations.annotations.SystemService;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
+import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.SystemService;
 
 /* 
  from http://developer.android.com/guide/topics/location/strategies.html 

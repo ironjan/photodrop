@@ -8,12 +8,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.dropbox.sync.android.DbxPath;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.github.ironjan.photodrop.helper.ImageOperations;
 import com.github.ironjan.photodrop.persistence.Post;
-import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EViewGroup;
 import com.googlecode.androidannotations.annotations.UiThread;
@@ -36,8 +34,6 @@ public class PostView extends RelativeLayout {
 
 	private Bitmap mThumbnail;
 
-	private Post mPost;
-
 	@Bean
 	ImageOperations mImOp;
 
@@ -46,7 +42,6 @@ public class PostView extends RelativeLayout {
 	}
 
 	public void bind(Post p) {
-		this.mPost = p;
 		txtComment.setText(p.metadata.comment);
 	}
 
