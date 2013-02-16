@@ -6,7 +6,7 @@ import android.widget.ToggleButton;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.StartActivity_;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.github.ironjan.photodrop.helper.Prefs_;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -30,8 +30,9 @@ public class PrefFragment extends SherlockFragment {
 	@Pref
 	Prefs_ prefs;
 
+	
 	@Bean
-	SessionKeeper sessionKeeper;
+	DropboxWrapper sessionKeeper;
 
 	private boolean mAutomaticSync, mSyncOnlyOnWifi;
 

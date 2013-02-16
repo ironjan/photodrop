@@ -2,7 +2,6 @@ package com.github.ironjan.photodrop.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -14,10 +13,7 @@ import com.github.ironjan.photodrop.PrefActivity_;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.ShareActivity_;
 import com.github.ironjan.photodrop.crouton.CroutonW;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
-import com.github.ironjan.photodrop.model.DirKeeper;
-import com.github.ironjan.photodrop.model.PostListAdapter;
-import com.googlecode.androidannotations.annotations.AfterViews;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
@@ -44,32 +40,16 @@ public class StreamFragment extends SherlockListFragment {
 
 
 	@Bean
-	SessionKeeper sessionKeeper;
+	DropboxWrapper sessionKeeper;
 
 	@StringRes
 	String noPhotoRightNow;
 	
-	@Bean
-	PostListAdapter postLA;
 
 	@ViewById
 	ListView list;
-	@Bean
-	DirKeeper mDirKeeper;
-
 	private Uri mUri;
 
-	@AfterViews
-	void showSomeContent() {
-		setListAdapter(postLA);
-		postLA.registerDataSetObserver(new DataSetObserver() {
-			@Override
-			public void onChanged() {
-				super.onChanged();
-				invalidateList();
-			}
-		});
-	}
 
 	void invalidateList() {
 		list.invalidate();
@@ -79,7 +59,8 @@ public class StreamFragment extends SherlockListFragment {
 	void takePhoto() {
 		// todo grey out wihtout camera
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		mUri = Uri.fromFile(mDirKeeper.createNewPhotofile());
+
+		// fixme create new uri
 		Log.w(TAG, String.format("Taking new photo, target uri: %s", mUri)); //$NON-NLS-1$
 		if (mUri != null) {
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
@@ -107,8 +88,17 @@ public class StreamFragment extends SherlockListFragment {
 		case TAKE_REQUEST_CODE:
 			resultTakePhoto(resultCode);
 			break;
+		case SHARE_PHOTO_REQUEST:
+			resultSharePhoto(resultCode);
+			break;
 		default:
 			break;
+		}
+	}
+
+	private void resultSharePhoto(int resultCode) {
+		if(resultCode == Activity.RESULT_OK){
+			CroutonW.showConfirm(getSherlockActivity(), "Photo has been shared and will be uploaded as soon as possible");
 		}
 	}
 

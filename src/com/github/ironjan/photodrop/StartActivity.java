@@ -1,11 +1,10 @@
 package com.github.ironjan.photodrop;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.github.ironjan.photodrop.crouton.CroutonW;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -19,7 +18,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 @OptionsMenu(R.menu.main)
 public class StartActivity extends SherlockActivity {
 
-	private static final String TAG = StartActivity.class.getSimpleName();
 	public static final int REQUEST_LINK_TO_DBX = 0;
 
 	@OptionsItem(R.id.mnuAbout)
@@ -28,7 +26,7 @@ public class StartActivity extends SherlockActivity {
 	}
 
 	@Bean
-	SessionKeeper sessionKeeper;
+	DropboxWrapper sessionKeeper;
 
 	@Click(R.id.btnLink)
 	void startAuthentication() {

@@ -11,6 +11,8 @@ import android.annotation.SuppressLint;
 import android.location.Location;
 import android.util.Log;
 
+import com.dropbox.sync.android.DbxFile;
+
 public class PostMetadata {
 	private static final String TAG = PostMetadata.class.getSimpleName();
 
@@ -42,7 +44,8 @@ public class PostMetadata {
 	@SuppressLint("DefaultLocale")
 	public String toFileContent() {
 		return String
-				.format(Locale.US,"%s%f\n%s%f\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
+				.format(Locale.US,
+						"%s%f\n%s%f\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
 	}
 
 	public static PostMetadata fromFile(File f) {
@@ -76,6 +79,31 @@ public class PostMetadata {
 			Log.e(TAG, e.getMessage(), e);
 		}
 		return null;
+	}
+
+	public static PostMetadata fromDropboxFile(DbxFile metaFile)
+			throws IOException {
+		String fileContent = metaFile.readString();
+
+		String[] splittedContents = fileContent.split("\n"); //$NON-NLS-1$
+		
+		final String latitudeString = splittedContents[0].substring(
+				latitudeKey.length());
+		final String longitudeString = splittedContents[1].substring(
+				longitudeKey.length());
+		final String commentString = splittedContents[2].substring(
+				commentKey.length());
+		
+		Double tLatitude = (latitudeString == null || latitudeString
+				.equals("null")) ? null : Double.valueOf( //$NON-NLS-1$
+				Double.parseDouble(latitudeString));
+		Double tLongitude = (longitudeString == null || longitudeString
+				.equals("null")) ? null : Double.valueOf(Double //$NON-NLS-1$
+				.parseDouble(longitudeString));
+
+		String tComment = commentString;
+
+		return new PostMetadata(tLatitude, tLongitude, tComment);
 	}
 
 }

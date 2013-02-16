@@ -1,15 +1,17 @@
 package com.github.ironjan.photodrop.persistence;
 
+import com.dropbox.sync.android.DbxPath;
+
 
 
 public class Post {
 	public final PostMetadata metadata;
-	public final String imagePath;
+	public final DbxPath imagePath;
 
-	Post(PostMetadata metadata, String photoPath) {
+	Post(PostMetadata metadata, DbxPath photo) {
 		super();
 		this.metadata = metadata;		
-		this.imagePath = photoPath;
+		this.imagePath = photo;
 	}
 
 }

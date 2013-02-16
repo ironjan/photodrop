@@ -8,15 +8,20 @@ import android.widget.ImageButton;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.dropbox.sync.android.DbxException;
+import com.dropbox.sync.android.DbxSyncStatus.OperationStatus;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.crouton.CroutonW;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
+import com.github.ironjan.photodrop.dbwrap.SyncStatusListenerBean;
+import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
-public class CustomActionbarFragment extends SherlockFragment  {
+public class CustomActionbarFragment extends SherlockFragment implements SyncListenerCallback {
 
 	private static final com.actionbarsherlock.app.ActionBar.LayoutParams sCustomABLayoutParams = new ActionBar.LayoutParams(
 			Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -32,8 +37,16 @@ public class CustomActionbarFragment extends SherlockFragment  {
 	private Bundle mSavedInstanceState;
 
 	@Bean
-	SessionKeeper mSessionKeeper;
+	SyncStatusListenerBean mSyncListener;
 	
+	@AfterInject
+	void setSyncListenerCallback(){
+		mSyncListener.setCallBack(this);
+	}
+	
+	@Bean
+	DropboxWrapper mSessionKeeper;
+
 	@Override
 	public void onResume() {
 		initCustomABViews();
@@ -67,7 +80,6 @@ public class CustomActionbarFragment extends SherlockFragment  {
 		return mActionBar;
 	}
 
-
 	void setupCustomActionBarOnClick() {
 		// we need to set up click listener because btnRefresh is not found by
 		// AndroidAnnotations
@@ -86,7 +98,11 @@ public class CustomActionbarFragment extends SherlockFragment  {
 	@Background
 	void refresh() {
 		showProgressInAB();
-		// todo down sync
+		try {
+			mSessionKeeper.sync(mSyncListener);
+		} catch (DbxException e) {
+			CroutonW.showAlert(getActivity(), e);
+		}
 	}
 
 	@UiThread
@@ -97,6 +113,28 @@ public class CustomActionbarFragment extends SherlockFragment  {
 	@UiThread
 	void showRefreshInAB() {
 		mActionBar.setCustomView(mCustomABRefresh, sCustomABLayoutParams);
+	}
+
+	@Override
+	public void downloadStatusChanged(OperationStatus download) {
+		if(!download.inProgress){
+			showRefreshInAB();
+		}
+	}
+
+	@Override
+	public void syncActiveChanged(boolean isSyncActive) {
+		if(!isSyncActive){
+			showRefreshInAB();
+		}
+	}
+
+	@Override
+	public void uploadStatusChanged(OperationStatus upload) { /* not needed here */
+	}
+
+	@Override
+	public void metadataStatusChanged(OperationStatus metadata) { /* not needed here */		
 	}
 
 }

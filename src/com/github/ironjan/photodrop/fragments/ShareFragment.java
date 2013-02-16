@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.crouton.CroutonW;
-import com.github.ironjan.photodrop.helper.ImageStorage;
 import com.github.ironjan.photodrop.helper.LocBeanCallback;
 import com.github.ironjan.photodrop.helper.LocationBean;
 import com.github.ironjan.photodrop.model.PostSharer;
@@ -61,16 +60,12 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 
 	private boolean mAfterViews;
 
-	@Bean
-	ImageStorage mImageStorage;
 
 	@Bean
 	LocationBean mLocationBean;
 
 	@Bean
 	PostSharer mSharer;
-
-	private String mUriString;
 
 	private Activity mActivity;
 
@@ -81,7 +76,6 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 
 	public void setUri(String uri) {
 		this.mUri = Uri.parse(uri);
-		this.mUriString = uri;
 		Log.v(TAG, String.format("Starting share of %s", mUri)); //$NON-NLS-1$
 		if (mAfterViews) {
 			loadImage();
@@ -92,7 +86,7 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 	void loadImage() {
 		mAfterViews = true;
 		if (mUri != null) {
-			imgPhoto.setImageBitmap(mImageStorage.getThumbnail(mUriString));
+			// fixme load image
 			progress.setVisibility(View.GONE);
 		}
 	}

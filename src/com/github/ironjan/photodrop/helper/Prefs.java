@@ -7,7 +7,7 @@ import com.googlecode.androidannotations.annotations.sharedpreferences.SharedPre
 
 @SharedPref
 public interface Prefs {
-
+	
 	@DefaultInt(Constants.HOUR)
 	public int syncIntervall();
 

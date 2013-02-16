@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.FromHtml;
@@ -13,7 +13,6 @@ import com.googlecode.androidannotations.annotations.ViewById;
 @EFragment(R.layout.frgmt_os_libs)
 public class OSLibsFragment extends SherlockFragment {
 
-	
 	@ViewById(R.id.libNameAA)
 	@FromHtml(R.string.lib_name_aa)
 	TextView libNameAA;
@@ -99,6 +98,6 @@ public class OSLibsFragment extends SherlockFragment {
 	TextView libNoteDropbox;
 
 	@Bean
-	SessionKeeper sessionKeeper;
+	DropboxWrapper sessionKeeper;
 
 }
