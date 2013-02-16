@@ -21,7 +21,8 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
-public class CustomActionbarFragment extends SherlockFragment implements SyncListenerCallback {
+public class CustomActionbarFragment extends SherlockFragment implements
+		SyncListenerCallback {
 
 	private static final com.actionbarsherlock.app.ActionBar.LayoutParams sCustomABLayoutParams = new ActionBar.LayoutParams(
 			Gravity.CENTER_VERTICAL | Gravity.RIGHT);
@@ -38,12 +39,12 @@ public class CustomActionbarFragment extends SherlockFragment implements SyncLis
 
 	@Bean
 	SyncStatusListenerBean mSyncListener;
-	
+
 	@AfterInject
-	void setSyncListenerCallback(){
+	void setSyncListenerCallback() {
 		mSyncListener.setCallBack(this);
 	}
-	
+
 	@Bean
 	DropboxWrapper mSessionKeeper;
 
@@ -117,14 +118,18 @@ public class CustomActionbarFragment extends SherlockFragment implements SyncLis
 
 	@Override
 	public void downloadStatusChanged(OperationStatus download) {
-		if(!download.inProgress){
-			showRefreshInAB();
-		}
+		showProgress(download.inProgress);
 	}
 
 	@Override
 	public void syncActiveChanged(boolean isSyncActive) {
-		if(!isSyncActive){
+		showProgress(isSyncActive);
+	}
+
+	void showProgress(boolean isSyncActive) {
+		if (isSyncActive) {
+			showProgressInAB();
+		} else {
 			showRefreshInAB();
 		}
 	}
@@ -134,7 +139,10 @@ public class CustomActionbarFragment extends SherlockFragment implements SyncLis
 	}
 
 	@Override
-	public void metadataStatusChanged(OperationStatus metadata) { /* not needed here */		
+	public void metadataStatusChanged(OperationStatus metadata) { /*
+																 * not needed
+																 * here
+																 */
 	}
 
 }

@@ -14,6 +14,8 @@ import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.ShareActivity_;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
+import com.github.ironjan.photodrop.model.PostListAdapter;
+import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
@@ -24,8 +26,8 @@ import com.googlecode.androidannotations.annotations.res.StringRes;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 @EFragment
-@OptionsMenu({R.menu.main,R.menu.stream})
-public class StreamFragment extends SherlockListFragment {
+@OptionsMenu({ R.menu.main, R.menu.stream })
+public class StreamFragment extends SherlockListFragment  {
 
 	@SuppressWarnings("nls")
 	private static final String sImageContentType = "image/*";
@@ -38,18 +40,24 @@ public class StreamFragment extends SherlockListFragment {
 
 	private static final String TAG = StreamFragment.class.getSimpleName();
 
-
 	@Bean
 	DropboxWrapper sessionKeeper;
 
 	@StringRes
 	String noPhotoRightNow;
-	
 
 	@ViewById
 	ListView list;
 	private Uri mUri;
 
+	@Bean
+	PostListAdapter mPostListAdapter;
+
+	@AfterViews
+	void showContent() {
+		setListAdapter(mPostListAdapter);
+		mPostListAdapter.refresh();
+	}
 
 	void invalidateList() {
 		list.invalidate();
@@ -66,8 +74,7 @@ public class StreamFragment extends SherlockListFragment {
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
 			startActivityForResult(intent, TAKE_REQUEST_CODE);
 		} else {
-			CroutonW.showAlert(getSherlockActivity(),
-					noPhotoRightNow); 
+			CroutonW.showAlert(getSherlockActivity(), noPhotoRightNow);
 		}
 	}
 
@@ -97,8 +104,9 @@ public class StreamFragment extends SherlockListFragment {
 	}
 
 	private void resultSharePhoto(int resultCode) {
-		if(resultCode == Activity.RESULT_OK){
-			CroutonW.showConfirm(getSherlockActivity(), "Photo has been shared and will be uploaded as soon as possible");
+		if (resultCode == Activity.RESULT_OK) {
+			CroutonW.showConfirm(getSherlockActivity(),
+					"Photo has been shared and will be uploaded as soon as possible"); //$NON-NLS-1$
 		}
 	}
 
@@ -110,7 +118,6 @@ public class StreamFragment extends SherlockListFragment {
 		}
 	}
 
-
 	private static Uri extractChooseExistingUri(Intent data) {
 		Uri selectedImage = null;
 		if (data != null && data.getData() != null) {
@@ -119,7 +126,7 @@ public class StreamFragment extends SherlockListFragment {
 
 		return selectedImage;
 	}
-	
+
 	private void resultTakePhoto(int resultCode) {
 		if (resultCode == Activity.RESULT_OK) {
 			sharePhoto();
@@ -131,7 +138,8 @@ public class StreamFragment extends SherlockListFragment {
 	 * NewPostActivity.
 	 */
 	private void sharePhoto() {
-		ShareActivity_.intent(getSherlockActivity()).photoUri(String.format("%s",  mUri)) //$NON-NLS-1$
+		ShareActivity_.intent(getSherlockActivity())
+				.photoUri(String.format("%s", mUri)) //$NON-NLS-1$
 				.startForResult(SHARE_PHOTO_REQUEST);
 	}
 
