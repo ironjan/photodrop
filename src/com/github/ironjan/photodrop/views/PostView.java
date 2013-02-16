@@ -8,8 +8,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.dropbox.sync.android.DbxPath;
 import com.github.ironjan.photodrop.R;
+import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
+import com.github.ironjan.photodrop.helper.ImageOperations;
 import com.github.ironjan.photodrop.persistence.Post;
+import com.googlecode.androidannotations.annotations.Background;
+import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EViewGroup;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
@@ -26,20 +31,23 @@ public class PostView extends RelativeLayout {
 	@ViewById(android.R.id.progress)
 	ProgressBar progress;
 
+	@Bean
+	DropboxWrapper mDbWrapper;
+
 	private Bitmap mThumbnail;
+
+	private Post mPost;
+
+	@Bean
+	ImageOperations mImOp;
 
 	public PostView(Context context) {
 		super(context);
 	}
 
 	public void bind(Post p) {
+		this.mPost = p;
 		txtComment.setText(p.metadata.comment);
-		loadThumb();
-	}
-
-	void loadThumb() {
-		// fixme load image
-		progress.setVisibility(View.GONE);
 	}
 
 	public ImageView getImageView() {
