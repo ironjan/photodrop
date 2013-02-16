@@ -16,6 +16,7 @@ import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.OptionsItem;
@@ -27,7 +28,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 @EFragment
 @OptionsMenu({ R.menu.main, R.menu.stream })
-public class StreamFragment extends SherlockListFragment  {
+public class StreamFragment extends SherlockListFragment {
 
 	@SuppressWarnings("nls")
 	private static final String sImageContentType = "image/*";
@@ -56,6 +57,11 @@ public class StreamFragment extends SherlockListFragment  {
 	@AfterViews
 	void showContent() {
 		setListAdapter(mPostListAdapter);
+	}
+
+	@AfterViews
+	@Background
+	void refreshList() {
 		mPostListAdapter.refresh();
 	}
 

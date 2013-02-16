@@ -17,8 +17,8 @@ public class PostMetadata {
 	private static final String TAG = PostMetadata.class.getSimpleName();
 
 	public final String comment;
-	private Double latitude;
-	private Double longitude;
+	public final Double latitude;
+	public final Double longitude;
 
 	@SuppressWarnings("nls")
 	private static final String latitudeKey = "latitude:",
