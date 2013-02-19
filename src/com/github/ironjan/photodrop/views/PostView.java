@@ -35,7 +35,7 @@ public class PostView extends RelativeLayout {
 	private Bitmap mThumbnail;
 
 	private Post mPost;
-
+	
 	public PostView(Context context) {
 		super(context);
 	}

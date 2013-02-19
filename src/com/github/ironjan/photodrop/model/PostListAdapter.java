@@ -14,8 +14,8 @@ import android.widget.ImageView;
 
 import com.github.ironjan.photodrop.persistence.Post;
 import com.github.ironjan.photodrop.persistence.PostCreator;
-import com.github.ironjan.photodrop.views.PostView;
 import com.github.ironjan.photodrop.views.PostView_;
+import com.github.ironjan.photodrop.views.PostView;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;

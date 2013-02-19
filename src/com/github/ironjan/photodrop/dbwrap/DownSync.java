@@ -140,6 +140,8 @@ class DownSync {
 			return;
 		}
 
+		Log.v(TAG, update.size() + " files need updates!");
+
 		for (String fileName : update) {
 			FileOutputStream outputStream = null;
 			try {
@@ -154,12 +156,13 @@ class DownSync {
 				fileRevDao.update(fileRev);
 				Log.v(TAG, String.format("Successfully updated %s", fileName));
 			} catch (Exception e) {
-				System.out.println("Something went wrong: " + e);
+				Log.e(TAG, e.getMessage(), e);
 			} finally {
 				if (outputStream != null) {
 					try {
 						outputStream.close();
 					} catch (IOException e) {
+						Log.e(TAG, e.getMessage(), e);
 					}
 				}
 			}
@@ -199,7 +202,8 @@ class DownSync {
 	private Entry getRemoteFolderContent() {
 		String hash = prefs.folderHash().get();
 		try {
-			Entry folderEntry = mApi.metadata(remoteDbFolder, -1, hash, true,
+			// todo we're always getting "nothing changed" here
+			Entry folderEntry = mApi.metadata(remoteDbFolder, -1, null, true,
 					null);
 			prefs.edit().folderHash().put(folderEntry.hash).apply();
 
