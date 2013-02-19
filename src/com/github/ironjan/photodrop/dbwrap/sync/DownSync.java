@@ -289,10 +289,10 @@ class DownSync {
 				syncIntervall, syncIntervall, pendingIntent);
 	}
 
-	class UpdateResult {
+	class UpdateResult { // dummy object
 	}
 
-	class CleanUpResult {
+	class CleanUpResult { // dummy object
 	}
 
 	public void setCallback(DownSyncCallback callback) {
