@@ -9,16 +9,12 @@ import android.widget.ImageButton;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.dbwrap.DownSyncCallback;
-import com.github.ironjan.photodrop.dbwrap.Syncer;
-import com.github.ironjan.photodrop.service.SyncService;
-import com.github.ironjan.photodrop.service.SyncService_;
-import com.googlecode.androidannotations.annotations.AfterInject;
+import com.github.ironjan.photodrop.dbwrap.sync.DownSyncCallback;
+import com.github.ironjan.photodrop.dbwrap.sync.SyncService_;
+import com.github.ironjan.photodrop.dbwrap.sync.Syncer;
 import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
-import com.googlecode.androidannotations.annotations.UiThread;
 
 @EFragment(R.layout.view_emptry)
 public class CustomActionbarFragment extends SherlockFragment implements
@@ -98,18 +94,15 @@ public class CustomActionbarFragment extends SherlockFragment implements
 		}
 	}
 
-	@Background
 	void refresh() {
 		showProgressInAB();
 		mSyncer.forceDownSync();
 	}
 
-	@UiThread
 	void showProgressInAB() {
 		mActionBar.setCustomView(mCustumABProgress, sCustomABLayoutParams);
 	}
 
-	@UiThread
 	void showRefreshInAB() {
 		mActionBar.setCustomView(mCustomABRefresh, sCustomABLayoutParams);
 	}

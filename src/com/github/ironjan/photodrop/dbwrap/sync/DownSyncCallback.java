@@ -1,4 +1,4 @@
-package com.github.ironjan.photodrop.dbwrap;
+package com.github.ironjan.photodrop.dbwrap.sync;
 
 public interface DownSyncCallback {
 	public void syncFinished();

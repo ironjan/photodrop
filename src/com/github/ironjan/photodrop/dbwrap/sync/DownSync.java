@@ -1,4 +1,4 @@
-package com.github.ironjan.photodrop.dbwrap;
+package com.github.ironjan.photodrop.dbwrap.sync;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.util.Log;
 
 import com.dropbox.client2.DropboxAPI;
@@ -15,6 +18,9 @@ import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
+import com.github.ironjan.photodrop.dbwrap.FileRev;
+import com.github.ironjan.photodrop.dbwrap.FileRevDAO;
+import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.helper.ConnectionBean;
 import com.github.ironjan.photodrop.helper.Prefs_;
 import com.github.ironjan.photodrop.model.DirKeeper;
@@ -22,6 +28,8 @@ import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.RootContext;
+import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.Trace;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.res.StringRes;
@@ -53,7 +61,7 @@ class DownSync {
 		public void syncStarted() { /* dummy */
 		}
 	};
-	private static final String TAG = null;
+	private static final String TAG = DownSync.class.getSimpleName();
 
 	@Bean
 	ConnectionBean cb;
@@ -66,6 +74,9 @@ class DownSync {
 	@Pref
 	Prefs_ prefs;
 
+	@SystemService
+	AlarmManager mAlarmManager;
+
 	private boolean mIsSyncing;
 
 	private Object mCleanUpFinished;
@@ -75,12 +86,17 @@ class DownSync {
 	private DownSyncCallback mCallback = mDummyCallback;
 	private boolean mRemoteFolderUnchanged;
 
-	public void autoSync() {
-		if (doesNotMeetAutoSyncConditions()) {
+	public synchronized void autoSync() {
+		if (mIsSyncing) {
 			return;
 		}
-
-		sync();
+		mIsSyncing = true;
+		if (doesNotMeetAutoSyncConditions()) {
+			scheduleNext();
+		} else {
+			// not really forced, but no need to double code
+			sync();
+		}
 	}
 
 	private boolean doesNotMeetAutoSyncConditions() {
@@ -92,14 +108,17 @@ class DownSync {
 		return !meetsConditions;
 	}
 
-	@Background
-	public void sync() {
+	public synchronized void forceSync() {
 		if (mIsSyncing) {
 			return;
 		}
-
 		mIsSyncing = true;
 		mCallback.syncStarted();
+		sync();
+	}
+
+	@Background
+	void sync() {
 
 		if (!cb.hasInternetConnection()) {
 			scheduleNext();
@@ -119,7 +138,9 @@ class DownSync {
 	@Background
 	@Trace
 	void updateLocalFiles(Entry folderEntry) {
-		Log.v(TAG, "opened DB");
+		String fTAG = DownSync.TAG + ":updateLocalFiles";
+
+		Log.v(fTAG, "opened DB");
 		fileRevDao.open();
 
 		List<Entry> remoteFiles = folderEntry.contents;
@@ -128,46 +149,44 @@ class DownSync {
 
 		for (Entry re : remoteFiles) {
 			String fileName = re.fileName();
-			Log.v(TAG, "Checking " + fileName + " for updates");
+			Log.v(fTAG, "Checking " + fileName + " for updates");
 			FileRev frev = fileRevDao.findOrCreateFileRevByName(fileName);
+			Log.v(fTAG, "Comparing " + frev + " with " + re.rev);
 			if (!re.rev.equals(frev.rev)) {
-				Log.v(TAG, fileName + " needs to be updated.");
+				Log.v(fTAG, fileName + " needs to be updated.");
 				update.add(fileName);
 			}
 		}
 
-		if (update.size() == 0) {
-			Log.v(TAG, "nothing to update");
-			return;
-		}
-
-		Log.v(TAG, update.size() + " files need updates!");
+		Log.v(fTAG, update.size() + " files need updates!");
 
 		for (String fileName : update) {
 			FileOutputStream outputStream = null;
 			try {
 				File file = new File(mExtDir, fileName);
 				outputStream = new FileOutputStream(file);
-				Log.v(TAG, String.format("Trying to update %s", fileName));
+				Log.v(fTAG, String.format("Trying to update %s", fileName));
 				DropboxFileInfo info = mApi.getFile(remoteDbFolder + fileName,
 						null, outputStream, null);
 				FileRev fileRev = fileRevDao
 						.findOrCreateFileRevByName(fileName);
 				fileRev.rev = info.getMetadata().rev;
 				fileRevDao.update(fileRev);
-				Log.v(TAG, String.format("Successfully updated %s", fileName));
+				Log.v(fTAG, String.format("Successfully updated %s", fileName));
 			} catch (Exception e) {
-				Log.e(TAG, e.getMessage(), e);
+				Log.e(fTAG, e.getMessage(), e);
 			} finally {
 				if (outputStream != null) {
 					try {
 						outputStream.close();
 					} catch (IOException e) {
-						Log.e(TAG, e.getMessage(), e);
+						Log.e(fTAG, e.getMessage(), e);
 					}
 				}
 			}
 		}
+
+		Log.v(fTAG, "finished update");
 
 		syncFinish(new UpdateResult(), null);
 	}
@@ -197,6 +216,7 @@ class DownSync {
 			// todo check for success
 		}
 
+		Log.v(TAG, "finished clean");
 		syncFinish(null, new CleanUpResult());
 	}
 
@@ -244,13 +264,29 @@ class DownSync {
 			mCleanUpFinished = null;
 			mIsSyncing = false;
 			mCallback.syncFinished();
+			Log.v(TAG, "sync finished");
+			scheduleNext();
 		}
+
 	}
 
+	@Pref
+	Prefs_ mPrefs;
+
+	@RootContext
+	Context context;
+
 	private void scheduleNext() {
-		// TODO Auto-generated method stub
 		mRemoteFolderUnchanged = false;
 		mCallback.syncFinished();
+		mIsSyncing = false;
+
+		int syncIntervall = mPrefs.syncIntervall().get();
+		PendingIntent pendingIntent = PendingIntent.getService(context, 0,
+				SyncService_.intent(context).get(),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+				syncIntervall, syncIntervall, pendingIntent);
 	}
 
 	class UpdateResult {

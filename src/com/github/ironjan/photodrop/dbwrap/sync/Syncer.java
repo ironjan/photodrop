@@ -1,4 +1,4 @@
-package com.github.ironjan.photodrop.dbwrap;
+package com.github.ironjan.photodrop.dbwrap.sync;
 
 import java.io.File;
 
@@ -10,12 +10,12 @@ public class Syncer {
 	@Bean
 	DownSync downSync;
 
-	public void downSync() {
+	protected void downSync() {
 		downSync.autoSync();
 	}
 	
 	public void forceDownSync(){
-		downSync.sync();
+		downSync.forceSync();
 	}
 
 	public static void upload(File f) throws Exception {

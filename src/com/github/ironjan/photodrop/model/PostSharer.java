@@ -12,7 +12,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
-import com.github.ironjan.photodrop.dbwrap.Uploader;
+import com.github.ironjan.photodrop.dbwrap.sync.Uploader;
 import com.github.ironjan.photodrop.helper.ImageStorage;
 import com.github.ironjan.photodrop.persistence.PostMetadata;
 import com.googlecode.androidannotations.annotations.Background;
