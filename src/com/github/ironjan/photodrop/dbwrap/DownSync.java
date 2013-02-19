@@ -22,6 +22,7 @@ import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EBean;
+import com.googlecode.androidannotations.annotations.Trace;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.res.StringRes;
 import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
@@ -89,17 +90,23 @@ class DownSync {
 
 	@Background
 	public void sync() {
+
 		if (mIsSyncing) {
+			Log.v(TAG, "already syncing...");
 			return;
 		}
 
 		if (!cb.hasInternetConnection()) {
+			Log.v(TAG,
+					"scheduled next sync because there is no internet connection");
 			scheduleNext();
 		}
 
 		Entry folderEntry = getRemoteFolderContent();
 
 		if (folderEntry == null || mRemoteFolderUnchanged == true) {
+			Log.v(TAG,
+					"either folder is null or nothing changed. schedule next");
 			scheduleNext();
 			return;
 		}
@@ -108,7 +115,9 @@ class DownSync {
 		updateLocalFiles(folderEntry);
 	}
 
-	private void updateLocalFiles(Entry folderEntry) {
+	@Background
+	@Trace
+	void updateLocalFiles(Entry folderEntry) {
 		Log.v(TAG, "opened DB");
 		fileRevDao.open();
 
@@ -118,8 +127,10 @@ class DownSync {
 
 		for (Entry re : remoteFiles) {
 			String fileName = re.fileName();
+			Log.v(TAG, "Checking " + fileName + " for updates");
 			FileRev frev = fileRevDao.findOrCreateFileRevByName(fileName);
 			if (!re.rev.equals(frev.rev)) {
+				Log.v(TAG, fileName + " needs to be updated.");
 				update.add(fileName);
 			}
 		}
@@ -157,7 +168,9 @@ class DownSync {
 		syncFinish(new UpdateResult(), null);
 	}
 
-	private void cleanUpLocalFiles(Entry folderEntry) {
+	@Background
+	@Trace
+	void cleanUpLocalFiles(Entry folderEntry) {
 		File[] localFilesA = mExtDir.listFiles();
 		HashMap<String, File> nameToFilesToDelete = new HashMap<String, File>();
 		for (File lf : localFilesA) {
@@ -189,10 +202,14 @@ class DownSync {
 			Entry folderEntry = mApi.metadata(remoteDbFolder, -1, hash, true,
 					null);
 			prefs.edit().folderHash().put(folderEntry.hash).apply();
+
+			Log.v(TAG, "Got new folder entry: " + folderEntry);
+
 			return folderEntry;
 		} catch (DropboxServerException e) {
 			if (e.error == DropboxServerException._304_NOT_MODIFIED) {
 				mRemoteFolderUnchanged = true;
+				Log.v(TAG, "Remote folder did not change, no update necessary.");
 			}
 		} catch (DropboxException e) {
 			Log.e(TAG, e.getMessage(), e);
@@ -215,7 +232,7 @@ class DownSync {
 		} else if (c != null) {
 			mCleanUpFinished = c;
 		}
-	
+
 		if (mUpdateFinished != null && mCleanUpFinished != null) {
 			mUpdateFinished = null;
 			mCleanUpFinished = null;
@@ -227,6 +244,7 @@ class DownSync {
 	private void scheduleNext() {
 		// TODO Auto-generated method stub
 		mRemoteFolderUnchanged = false;
+		mCallback.syncFinished();
 	}
 
 	class UpdateResult {
