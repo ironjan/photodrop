@@ -66,6 +66,8 @@
         <activity
             android:name="ShareActivity_"
             android:label="@string/app_name" />
+
+        <service android:name=".service.SyncService_" />
     </application>
 
 </manifest>

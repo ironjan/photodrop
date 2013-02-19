@@ -33,6 +33,9 @@ public class DirKeeper {
 
 	private boolean isExtStorageAvailable() {
 		updateStorageAvailability();
+		Log.w(TAG,
+				"External storage state = "
+						+ Environment.getExternalStorageState());
 		return mExternalStorageAvailable;
 	}
 
@@ -42,14 +45,17 @@ public class DirKeeper {
 	 */
 	public File getExtFilesDir() {
 		if (!isExtStorageAvailable()) {
-			Log.w(TAG, Environment.getExternalStorageState());
 			return null;
 		}
 
-		if (SDK_INT >= FROYO) {
-			return getExtFileDirPostFroyo();
+		File extDir = null;
+		if (SDK_INT >= FROYO){
+			extDir = getExtFileDirPostFroyo();
+		} else {
+			extDir = getExtFileDirPreFroyo();
 		}
-		return getExtFileDirPreFroyo();
+
+		return extDir;
 	}
 
 	private static File getExtFileDirPreFroyo() {
@@ -66,7 +72,8 @@ public class DirKeeper {
 	}
 
 	private File getExtFileDirPostFroyo() {
-		return context.getExternalFilesDir(null);
+		File externalFilesDir = context.getExternalFilesDir(null);
+		return externalFilesDir;
 	}
 
 	void updateStorageAvailability() {

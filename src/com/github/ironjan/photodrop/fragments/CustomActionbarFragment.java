@@ -11,7 +11,10 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.dbwrap.DownSyncCallback;
 import com.github.ironjan.photodrop.dbwrap.Syncer;
+import com.github.ironjan.photodrop.service.SyncService;
+import com.github.ironjan.photodrop.service.SyncService_;
 import com.googlecode.androidannotations.annotations.AfterInject;
+import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EFragment;
@@ -70,9 +73,14 @@ public class CustomActionbarFragment extends SherlockFragment implements
 		return mActionBar;
 	}
 
-	@AfterInject
+	@AfterViews
 	void setDownSyncCallback() {
 		mSyncer.setDownSyncCallback(this);
+		startAutomaticSync();
+	}
+
+	private void startAutomaticSync() {
+		SyncService_.intent(getSherlockActivity()).start();
 	}
 
 	void setupCustomActionBarOnClick() {
@@ -111,4 +119,8 @@ public class CustomActionbarFragment extends SherlockFragment implements
 		showRefreshInAB();
 	}
 
+	@Override
+	public void syncStarted() {
+		showProgressInAB();
+	}
 }

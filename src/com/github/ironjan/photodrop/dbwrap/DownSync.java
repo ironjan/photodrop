@@ -48,6 +48,10 @@ class DownSync {
 		@Override
 		public void syncFinished() { /* dummy */
 		}
+
+		@Override
+		public void syncStarted() { /* dummy */
+		}
 	};
 	private static final String TAG = null;
 
@@ -90,23 +94,20 @@ class DownSync {
 
 	@Background
 	public void sync() {
-
 		if (mIsSyncing) {
-			Log.v(TAG, "already syncing...");
 			return;
 		}
 
+		mIsSyncing = true;
+		mCallback.syncStarted();
+
 		if (!cb.hasInternetConnection()) {
-			Log.v(TAG,
-					"scheduled next sync because there is no internet connection");
 			scheduleNext();
 		}
 
 		Entry folderEntry = getRemoteFolderContent();
 
 		if (folderEntry == null || mRemoteFolderUnchanged == true) {
-			Log.v(TAG,
-					"either folder is null or nothing changed. schedule next");
 			scheduleNext();
 			return;
 		}
@@ -202,7 +203,8 @@ class DownSync {
 	private Entry getRemoteFolderContent() {
 		String hash = prefs.folderHash().get();
 		try {
-			// todo we're always getting "nothing changed" here
+			// Entry folderEntry = mApi.metadata(remoteDbFolder, -1, hash, true,
+			// null);
 			Entry folderEntry = mApi.metadata(remoteDbFolder, -1, null, true,
 					null);
 			prefs.edit().folderHash().put(folderEntry.hash).apply();
