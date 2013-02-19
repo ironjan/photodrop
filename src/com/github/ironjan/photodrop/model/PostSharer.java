@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.github.ironjan.photodrop.persistence.PostMetadata;
-import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EBean;
 
@@ -27,8 +26,9 @@ public class PostSharer {
 	 *            the shared image
 	 * @param comment
 	 *            the user's comment
+	 * @throws Exception 
 	 */
-	public void share(Uri imageUri, String comment) {
+	public void share(Uri imageUri, String comment) throws Exception {
 		share(imageUri, null, comment);
 	}
 
@@ -42,23 +42,23 @@ public class PostSharer {
 	 *            where the image was shared
 	 * @param comment
 	 *            the user's comment
+	 * @throws Exception
 	 */
-	@Background
-	public void share(Uri imageUri, Location location, String comment) {
+	public void share(Uri imageUri, Location location, String comment)
+			throws Exception {
 		Log.v(TAG, String.format("Sharing %s", imageUri)); //$NON-NLS-1$
 
-		
 		File imageFile = new File(imageUri.getPath()); // fixme does this work
-		
+
 		PostMetadata metadata = new PostMetadata(location, comment);
 		File metadataFile = saveMetadata(imageFile.getName(), metadata);
-		
 
 		mSessionKeeper.add(imageFile);
 		mSessionKeeper.add(metadataFile);
 	}
 
-	private static File saveMetadata(String name, PostMetadata metadata) {
+	private static File saveMetadata(String name, PostMetadata metadata)
+			throws Exception {
 		// todo what to do if we could not write metadata?
 
 		try {
@@ -68,10 +68,10 @@ public class PostSharer {
 			fw.close();
 			return metadataFile;
 		} catch (Exception e) {
-			Log.e(TAG, "Could not write metadata", e); //$NON-NLS-1$
+			final String message = "Could not write metadata"; //$NON-NLS-1$
+			Log.e(TAG, message, e);
+			throw new Exception(message);
 		}
-
-		return null;
 	}
 
 }

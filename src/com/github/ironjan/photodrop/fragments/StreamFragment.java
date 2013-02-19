@@ -14,6 +14,7 @@ import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.ShareActivity_;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
+import com.github.ironjan.photodrop.helper.ImageOperations;
 import com.github.ironjan.photodrop.model.PostListAdapter;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
@@ -45,7 +46,7 @@ public class StreamFragment extends SherlockListFragment {
 	DropboxWrapper sessionKeeper;
 
 	@StringRes
-	String noPhotoRightNow;
+	String noPhotoRightNow, niy;
 
 	@ViewById
 	ListView list;
@@ -53,6 +54,9 @@ public class StreamFragment extends SherlockListFragment {
 
 	@Bean
 	PostListAdapter mPostListAdapter;
+
+	@Bean
+	ImageOperations mImageOperations;
 
 	@AfterViews
 	void showContent() {
@@ -74,7 +78,7 @@ public class StreamFragment extends SherlockListFragment {
 		// todo grey out wihtout camera
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-		// fixme create new uri
+		mUri = mImageOperations.newPhotoUri();
 		Log.w(TAG, String.format("Taking new photo, target uri: %s", mUri)); //$NON-NLS-1$
 		if (mUri != null) {
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
@@ -86,10 +90,11 @@ public class StreamFragment extends SherlockListFragment {
 
 	@OptionsItem(R.id.mnuChoose)
 	void chooseExistingPicture() {
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-		intent.setType(sImageContentType);
-		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		startActivityForResult(intent, CHOOSE_REQUEST_CODE);
+		CroutonW.showInfo(getSherlockActivity(), niy);
+		// Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		// intent.setType(sImageContentType);
+		// intent.addCategory(Intent.CATEGORY_OPENABLE);
+		// startActivityForResult(intent, CHOOSE_REQUEST_CODE);
 	}
 
 	@Override

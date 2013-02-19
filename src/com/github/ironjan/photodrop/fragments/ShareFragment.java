@@ -21,6 +21,7 @@ import com.github.ironjan.photodrop.helper.LocationBean;
 import com.github.ironjan.photodrop.model.PostSharer;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
@@ -59,7 +60,6 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 	ProgressBar progress;
 
 	private boolean mAfterViews;
-
 
 	@Bean
 	LocationBean mLocationBean;
@@ -112,15 +112,15 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 		mLocationBean.stopListening();
 		super.onPause();
 	}
-	
+
 	@Override
 	public void onResume() {
-		if(mLocationIsAdded){
+		if (mLocationIsAdded) {
 			mLocationBean.startListening(this);
 		}
 		super.onResume();
 	}
-	
+
 	private void removeLocation() {
 		mLocationBean.stopListening();
 		btnLocation.setImageDrawable(ic_location_off_dark);
@@ -152,13 +152,18 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 	}
 
 	@OptionsItem(R.id.mnuShare)
+	@Background
 	void share() {
 		String comment = txtComment.getText().toString();
-		if(comment.equals("")){ //$NON-NLS-1$
+		if (comment.equals("")) { //$NON-NLS-1$
 			comment = noCommentGiven;
 		}
-		mSharer.share(mUri, mLocation, comment);
-		mActivity.setResult(Activity.RESULT_OK);
+		try {
+			mSharer.share(mUri, mLocation, comment);
+			mActivity.setResult(Activity.RESULT_OK);
+		} catch (Exception e) {
+			mActivity.setResult(Activity.RESULT_CANCELED);
+		}
 		mActivity.finish();
 	}
 

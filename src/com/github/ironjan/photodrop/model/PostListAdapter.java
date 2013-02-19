@@ -1,10 +1,12 @@
 package com.github.ironjan.photodrop.model;
 
 import java.util.List;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,9 +31,11 @@ import com.googlecode.androidannotations.api.Scope;
 @EBean(scope = Scope.Singleton)
 public class PostListAdapter extends BaseAdapter {
 
+	private static final String TAG = PostListAdapter.class.getSimpleName();
+
 	@Bean
 	DropboxWrapper mDbxWrapper;
-	private List<Post> mPosts = new Vector<Post>();
+	private TreeMap<DbxFileInfo, Post> mPosts = new TreeMap<DbxFileInfo, Post>();
 
 	@RootContext
 	Context context;
@@ -41,31 +45,47 @@ public class PostListAdapter extends BaseAdapter {
 
 	@Bean
 	DropboxWrapper mDbWrapper;
+
 	private Vector<Bitmap> mCachedBms = new Vector<Bitmap>();
 	@Bean
 	ImageOperations mImOp;
 
+	private Vector<DbxFileInfo> mPosToFi = new Vector<DbxFileInfo>();
+
+	boolean mIsRefreshing = false;
+
 	@AfterInject
+	@Background
 	public void refresh() {
+		if (mIsRefreshing) {
+			return;
+		}
+
+		mIsRefreshing = true;
 		try {
 			List<DbxFileInfo> tFiles = mDbxWrapper.listFiles();
 
-			mPosts.clear();
-
 			for (DbxFileInfo fi : tFiles) {
 				if (isMetaFile(fi)) {
-					Post p = mPostCreator.fromDropboxMetaFileInfo(fi);
-					if (p != null) {
-						mPosts.add(p);
-						notifyDataSetChanged();
-					}
+					mPosToFi.add(fi);
+					updatePostFromFileInfo(fi);
+
 				}
 			}
 
 			notifyDataSetChanged();
 		} catch (DbxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, "Could not load posts", e); //$NON-NLS-1$
+		}
+
+		mIsRefreshing = false;
+	}
+
+	void updatePostFromFileInfo(DbxFileInfo fi) {
+		Post p = mPostCreator.fromDropboxMetaFileInfo(fi);
+		if (p != null) {
+			mPosts.put(fi, p);
+			notifyDataSetChanged();
 		}
 	}
 
@@ -86,7 +106,7 @@ public class PostListAdapter extends BaseAdapter {
 
 	@Override
 	public Post getItem(int position) {
-		return mPosts.get(position);
+		return mPosts.get(mPosToFi.get(position));
 	}
 
 	@Override
@@ -107,16 +127,18 @@ public class PostListAdapter extends BaseAdapter {
 
 		pv.bind(getItem(position));
 
-		if (isCached(position)) {
-			pv.setThumb(getCachedBm(position));
-		} else {
+		if (!isCached(position)) {
 			ImageView imageView = pv.getImageView();
 			loadInBackground(position, imageView);
 		}
+		pv.setThumb(getCachedBm(position));
 		return pv;
 	}
 
 	private Bitmap getCachedBm(int position) {
+		if (position < 0 || mCachedBms.size() <= position) {
+			return null;
+		}
 		return mCachedBms.get(position);
 	}
 
@@ -128,15 +150,13 @@ public class PostListAdapter extends BaseAdapter {
 		return getCachedBm(position) != null;
 	}
 
-	@Background
 	void loadInBackground(int position, ImageView imageView) {
 		try {
-			mCachedBms.add(position, null);
 			mCachedBms.add(position,
 					mImOp.loadScaledImage(getItem(position).imagePath));
 		} catch (Exception e) {
 			// fixme show loading fail
 		}
-
 	}
+
 }

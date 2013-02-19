@@ -1,5 +1,7 @@
 package com.github.ironjan.photodrop.dbwrap;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -72,7 +74,7 @@ public class DropboxWrapper {
 		return mDbxAcctMgr.hasLinkedAccount();
 	}
 
-	public DbxFileSystem getDropboxFilesystem() throws DbxException {
+	private DbxFileSystem getDropboxFilesystem() throws DbxException {
 		if (mDbxAcctMgr.hasLinkedAccount()) {
 			this.mDbxFs = DbxFileSystem.forAccount(mDbxAcctMgr
 					.getLinkedAccount());
@@ -123,6 +125,41 @@ public class DropboxWrapper {
 
 	public List<DbxFileInfo> listFiles() throws DbxException {
 		return getDropboxFilesystem().listFolder(DbxPath.ROOT);
+	}
+
+	public byte[] loadDropboxPathToByteArray(DbxPath path) throws IOException {
+		byte[] bytes = new byte[0];
+
+		BufferedInputStream in = null;
+		DbxFile dbxFile = null;
+		try {
+			dbxFile = getDropboxFilesystem().open(path);
+			FileInputStream fis = dbxFile.getReadStream();
+
+			in = new BufferedInputStream(fis);
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+			byte[] buffer = new byte[1024];
+			int bytesRead = -1;
+			while ((bytesRead = in.read(buffer)) != -1) {
+				bos.write(buffer, 0, bytesRead);
+			}
+			bytes = bos.toByteArray();
+
+		} finally {
+			if (in != null) {
+				in.close();
+			}
+			if (dbxFile != null) {
+				dbxFile.close();
+			}
+		}
+		return bytes;
+	}
+
+	public DbxFile open(DbxPath meta) throws DbxException {
+
+		return getDropboxFilesystem().open(meta);
 	}
 
 }

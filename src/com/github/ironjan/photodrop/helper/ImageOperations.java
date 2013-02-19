@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.dropbox.sync.android.DbxFile;
@@ -20,37 +22,16 @@ import com.googlecode.androidannotations.api.Scope;
 
 @EBean(scope = Scope.Singleton)
 public class ImageOperations {
+	private static final String TAG = ImageOperations.class.getSimpleName();
+
 	@Bean
 	DropboxWrapper mDbWrapper;
 
-	private byte[] loadDropboxPathToByteArray(DbxPath path) throws IOException {
-		byte[] bytes = new byte[0];
-
-		BufferedInputStream in = null;
-		try {
-			DbxFile dbxFile = mDbWrapper.getDropboxFilesystem().open(path);
-			FileInputStream fis = dbxFile.getReadStream();
-
-			in = new BufferedInputStream(fis);
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-			byte[] buffer = new byte[1024];
-			int bytesRead = -1;
-			while ((bytesRead = in.read(buffer)) != -1) {
-				bos.write(buffer, 0, bytesRead);
-			}
-			bytes = bos.toByteArray();
-
-		} finally {
-			if (in != null) {
-				in.close();
-			}
-		}
-		return bytes;
-	}
+	@Bean
+	ExtStorageBean mExtStorageBean;
 
 	public synchronized Bitmap loadScaledImage(DbxPath path) throws IOException {
-		byte[] bytes = loadDropboxPathToByteArray(path);
+		byte[] bytes = mDbWrapper.loadDropboxPathToByteArray(path);
 		int sampleSize = calculateSampleSizeForThumb(bytes);
 		Bitmap bm = loadSampleSizedImage(bytes, sampleSize);
 		return bm;
@@ -98,9 +79,20 @@ public class ImageOperations {
 		}
 	}
 
-	@SuppressWarnings("static-method") // annotation -> cannot be static
+	@SuppressWarnings("static-method")
+	// annotation -> cannot be static
 	@UiThread
 	void imageLoaded(ImageView imgPhoto, Bitmap bm) {
 		imgPhoto.setImageBitmap(bm);
 	}
+
+	public Uri newPhotoUri() {
+		try {
+			return Uri.fromFile(mExtStorageBean.createImageFile());
+		} catch (Exception e) {
+			Log.e(TAG, e.getMessage(), e);
+			return null;
+		}
+	}
+
 }

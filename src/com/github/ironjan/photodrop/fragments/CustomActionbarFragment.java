@@ -14,6 +14,8 @@ import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.DropboxWrapper;
 import com.github.ironjan.photodrop.dbwrap.SyncStatusListenerBean;
+import com.github.ironjan.photodrop.model.PostListAdapter;
+import com.github.ironjan.photodrop.model.PostListAdapter_;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Bean;
@@ -36,6 +38,9 @@ public class CustomActionbarFragment extends SherlockFragment implements
 	private ActionBar mActionBar;
 
 	private Bundle mSavedInstanceState;
+
+	@Bean
+	PostListAdapter mPostListAdapter;
 
 	@Bean
 	SyncStatusListenerBean mSyncListener;
@@ -118,15 +123,18 @@ public class CustomActionbarFragment extends SherlockFragment implements
 
 	@Override
 	public void downloadStatusChanged(OperationStatus download) {
-		showProgress(download.inProgress);
+		updateActionBar(download.inProgress);
+		if (!download.inProgress) {
+			mPostListAdapter.refresh();
+		}
 	}
 
 	@Override
 	public void syncActiveChanged(boolean isSyncActive) {
-		showProgress(isSyncActive);
+		updateActionBar(isSyncActive);
 	}
 
-	void showProgress(boolean isSyncActive) {
+	void updateActionBar(boolean isSyncActive) {
 		if (isSyncActive) {
 			showProgressInAB();
 		} else {
