@@ -1,7 +1,5 @@
 package com.github.ironjan.photodrop;
 
-import android.util.Log;
-
 import com.actionbarsherlock.app.SherlockActivity;
 import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
@@ -17,15 +15,15 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 @OptionsMenu(R.menu.main)
 public class StartActivity extends SherlockActivity {
 
-	private static final String TAG = StartActivity.class.getSimpleName();
-	
+
 	@OptionsItem(R.id.mnuAbout)
-	void mnuAboutClicked(){
+	void mnuAboutClicked() {
 		OSLibsActivity_.intent(this).start();
 	}
+
 	@Bean
 	SessionKeeper sessionKeeper;
-	
+
 	@Click(R.id.btnLink)
 	void startAuthentication() {
 		try {
@@ -34,7 +32,6 @@ public class StartActivity extends SherlockActivity {
 			CroutonW.showAlert(this, e);
 		}
 	}
-	
 
 	@Override
 	protected void onResume() {
@@ -42,15 +39,14 @@ public class StartActivity extends SherlockActivity {
 
 		try {
 			sessionKeeper.finishAuthentication();
+			if (sessionKeeper.isLinked()) {
+				StreamActivity_.intent(this).start();
+			}
 		} catch (IllegalStateException e) {
-			Log.e(TAG,
-					"The user is not authentificated. This exception can normally be ignored.", //$NON-NLS-1$
-					e);
+			sessionKeeper.unlink();
+			CroutonW.showAlert(this, e);
 		}
 
-		if (sessionKeeper.isLinked()) {
-			StreamActivity_.intent(this).start();
-		}
 	}
 
 	@Override
