@@ -9,7 +9,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.EBean;
 
@@ -158,14 +157,18 @@ public class FileRevDAO {
 	}
 
 	public void update(FileRev fileRev) {
-		Log.v(TAG, "update " + fileRev); //$NON-NLS-1$
+
 		ContentValues values = new ContentValues();
 		values.put(DropboxRevsHelper.COLUMN_FILE, fileRev.file);
-		String[] selectionArgs = { fileRev._id + "" }; //$NON-NLS-1$
-		database.beginTransaction();
-		database.update(DropboxRevsHelper.TABLE_DBREVS_NAME, values,
-				DropboxRevsHelper.COLUMN_ID + " = ?", selectionArgs); //$NON-NLS-1$
-		database.endTransaction();
+		values.put(DropboxRevsHelper.COLUMN_REV, fileRev.rev);
+
+		String selection = DropboxRevsHelper.COLUMN_ID + " LIKE ?";
+		String[] selectionArgs = { String.valueOf(fileRev._id) };
+
+		Log.v(TAG, "writing " + fileRev + " to database..."); //$NON-NLS-1$
+
+		database.update(DropboxRevsHelper.TABLE_DBREVS_NAME, values, selection,
+				selectionArgs); //$NON-NLS-1$
 	}
 
 	private static FileRev cursorToFileRev(Cursor cursor) {

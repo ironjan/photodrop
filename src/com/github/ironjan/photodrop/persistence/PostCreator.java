@@ -4,8 +4,6 @@ import java.io.File;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 
 import com.github.ironjan.photodrop.helper.ImageStorage;
 import com.github.ironjan.photodrop.model.DirKeeper;
@@ -25,7 +23,8 @@ public class PostCreator {
 
 	@AfterInject
 	void setMDirPath() {
-		mDirPath = mDirKeeper.getExtFilesDir().getPath();
+		File extFilesDir = mDirKeeper.getExtFilesDir();
+		mDirPath = extFilesDir.getPath();
 	}
 
 	@Bean
@@ -36,13 +35,8 @@ public class PostCreator {
 			return null;
 		}
 
-		final String fullPath;
-		if (metadataFilePath.contains(mDirPath)) {
-			fullPath = metadataFilePath;
-		} else {
-			fullPath = mDirPath.concat("/").concat(metadataFilePath); //$NON-NLS-1$
-			Log.w(TAG, "Had to correct path of metafile"); //$NON-NLS-1$
-		}
+		final String fullPath = metadataFilePath; //mDirPath.concat("/").concat(metadataFilePath); //$NON-NLS-1$
+
 		File metadataFile = new File(fullPath);
 		PostMetadata metadata = readMetadata(metadataFile);
 

@@ -10,7 +10,6 @@ import com.googlecode.androidannotations.annotations.OptionsItem;
 @EActivity(R.layout.act_os_libs)
 public class OSLibsActivity extends SherlockFragmentActivity {
 
-	 
 	@AfterViews
 	void setHomeAsUp() {
 		getSupportActionBar().setHomeButtonEnabled(true);

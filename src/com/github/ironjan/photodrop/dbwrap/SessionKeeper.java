@@ -24,7 +24,6 @@ public class SessionKeeper {
 
 	private DropboxAPI<AndroidAuthSession> mDBApi;
 
-	
 	public DropboxAPI<AndroidAuthSession> getmDBApi() {
 		return mDBApi;
 	}
@@ -41,6 +40,8 @@ public class SessionKeeper {
 
 	@AfterInject
 	void createMDBApi() {
+		Log.v(TAG, appKey + ":" + appSecret);
+
 		AppKeyPair appKeys = new AppKeyPair(appKey, appSecret);
 
 		AndroidAuthSession session = new AndroidAuthSession(appKeys,
@@ -58,7 +59,7 @@ public class SessionKeeper {
 	}
 
 	public void finishAuthentication() throws IllegalStateException {
-		if(getSession().isLinked()){
+		if (getSession().isLinked()) {
 			return;
 		}
 		if (getSession().authenticationSuccessful()) {
@@ -80,7 +81,7 @@ public class SessionKeeper {
 	public void unlink() {
 		getSession().unlink();
 		dbKeys.clear();
-		
+
 	}
 
 	private void storeKeys(String key, String secret) {

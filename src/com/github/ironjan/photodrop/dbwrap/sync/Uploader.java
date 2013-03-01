@@ -1,4 +1,4 @@
-package com.github.ironjan.photodrop.dbwrap;
+package com.github.ironjan.photodrop.dbwrap.sync;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +19,7 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
+import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.DirKeeper;
 import com.googlecode.androidannotations.annotations.AfterInject;
 import com.googlecode.androidannotations.annotations.Bean;
