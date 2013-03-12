@@ -13,7 +13,6 @@ import com.googlecode.androidannotations.annotations.ViewById;
 @EFragment(R.layout.frgmt_os_libs)
 public class OSLibsFragment extends SherlockFragment {
 
-	
 	@ViewById(R.id.libNameAA)
 	@FromHtml(R.string.lib_name_aa)
 	TextView libNameAA;

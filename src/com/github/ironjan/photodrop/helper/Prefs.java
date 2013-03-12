@@ -5,6 +5,7 @@ import com.googlecode.androidannotations.annotations.sharedpreferences.DefaultIn
 import com.googlecode.androidannotations.annotations.sharedpreferences.DefaultString;
 import com.googlecode.androidannotations.annotations.sharedpreferences.SharedPref;
 
+
 @SharedPref
 public interface Prefs {
 
@@ -16,6 +17,7 @@ public interface Prefs {
 	
 	@DefaultBoolean(true)
 	public boolean syncOnlyOnWifi();
+	
 	
 	@DefaultString("")
 	public String folderHash();

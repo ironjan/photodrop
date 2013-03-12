@@ -29,7 +29,7 @@ public class SessionKeeper {
 	}
 
 	@StringRes
-	String appKey, appSecret, authentificationNoInternet,
+	String appKey, appSecret, wrongDevSetup, authentificationNoInternet,
 			authentificationError;
 
 	@Pref
@@ -40,14 +40,19 @@ public class SessionKeeper {
 
 	@AfterInject
 	void createMDBApi() {
-		Log.v(TAG, appKey + ":" + appSecret);
-
-		AppKeyPair appKeys = new AppKeyPair(appKey, appSecret);
+		
+		AppKeyPair appKeys;
+		try{
+		appKeys = new AppKeyPair(appKey, appSecret);
 
 		AndroidAuthSession session = new AndroidAuthSession(appKeys,
 				ACCESS_TYPE, getAccessTokenPair());
 
 		mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+		}
+		catch(IllegalArgumentException e){
+			Log.e(TAG,wrongDevSetup, e);
+		}
 	}
 
 	public void startAuthentication(Context context) {

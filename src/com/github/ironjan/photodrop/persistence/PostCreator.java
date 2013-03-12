@@ -35,7 +35,11 @@ public class PostCreator {
 			return null;
 		}
 
-		final String fullPath = metadataFilePath; //mDirPath.concat("/").concat(metadataFilePath); //$NON-NLS-1$
+		
+		String fullPath = metadataFilePath;
+		if (!fullPath.contains(mDirPath)) {
+			fullPath = mDirPath.concat("/").concat(metadataFilePath); //$NON-NLS-1$
+		}
 
 		File metadataFile = new File(fullPath);
 		PostMetadata metadata = readMetadata(metadataFile);

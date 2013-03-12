@@ -5,6 +5,7 @@
     <string name="nyi">Not yet implemented.</string>
     <string name="noPicasaSupport">Cannot yet load images from picasa</string>
     <string name="picasaUrl" translatable="false">content://com.google.android.gallery3d.provider/picasa/</string>
+    <string name="wrongDevSetup">You have to set up the developmment environment by adding two String resources called appKey and appSecret which contain the app key and the app secret.</string>
     <string name="mailType" translatable="false">plain/text</string>
     <string name="imageType" translatable="false">image/*</string>
     <string name="jpgSuffix" translatable="false">.jpg</string>

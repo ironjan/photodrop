@@ -19,5 +19,5 @@ public class OSLibsActivity extends SherlockFragmentActivity {
 	void homeSelected() {
 		NavUtils.navigateUpTo(this, getParentActivityIntent());
 	}
-	
+
 }

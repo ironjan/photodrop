@@ -42,7 +42,8 @@ public class PostMetadata {
 	@SuppressLint("DefaultLocale")
 	public String toFileContent() {
 		return String
-				.format(Locale.US,"%s%f\n%s%f\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
+				.format(Locale.US,
+						"%s%s\n%s%s\n%s%s", latitudeKey, latitude, longitudeKey, longitude, commentKey, comment); //$NON-NLS-1$
 	}
 
 	public static PostMetadata fromFile(File f) {
