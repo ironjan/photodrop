@@ -13,7 +13,6 @@ import com.github.ironjan.photodrop.OSLibsActivity_;
 import com.github.ironjan.photodrop.PrefActivity_;
 import com.github.ironjan.photodrop.R;
 import com.github.ironjan.photodrop.ShareActivity_;
-import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.github.ironjan.photodrop.model.DirKeeper;
 import com.github.ironjan.photodrop.model.PostListAdapter;
@@ -26,6 +25,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.StringRes;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 @EFragment
@@ -85,7 +85,7 @@ public class StreamFragment extends SherlockListFragment {
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
 			startActivityForResult(intent, TAKE_REQUEST_CODE);
 		} else {
-			CroutonW.showAlert(getSherlockActivity(), noPhotoRightNow);
+			Crouton.showText(getActivity(), noPhotoRightNow, Style.ALERT);
 		}
 	}
 

@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.helper.ImageStorage;
 import com.github.ironjan.photodrop.helper.LocBeanCallback;
 import com.github.ironjan.photodrop.helper.LocationBean;
@@ -31,6 +30,9 @@ import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.res.DrawableRes;
 import com.googlecode.androidannotations.annotations.res.StringRes;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 @EFragment(R.layout.frgmt_share)
 @OptionsMenu(R.menu.share)
@@ -169,7 +171,7 @@ public class ShareFragment extends SherlockFragment implements LocBeanCallback {
 	}
 
 	private void nyi() {
-		CroutonW.showInfo(getSherlockActivity(), nyi);
+		Crouton.showText(getSherlockActivity(), nyi, Style.INFO);
 	}
 
 }

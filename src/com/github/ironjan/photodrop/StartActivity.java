@@ -1,7 +1,6 @@
 package com.github.ironjan.photodrop;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.github.ironjan.photodrop.crouton.CroutonW;
 import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
 import com.googlecode.androidannotations.annotations.Bean;
 import com.googlecode.androidannotations.annotations.Click;
@@ -10,11 +9,11 @@ import com.googlecode.androidannotations.annotations.OptionsItem;
 import com.googlecode.androidannotations.annotations.OptionsMenu;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 @EActivity(R.layout.act_authentification)
 @OptionsMenu(R.menu.main)
 public class StartActivity extends SherlockActivity {
-
 
 	@OptionsItem(R.id.mnuAbout)
 	void mnuAboutClicked() {
@@ -29,7 +28,7 @@ public class StartActivity extends SherlockActivity {
 		try {
 			sessionKeeper.startAuthentication(StartActivity.this);
 		} catch (IllegalStateException e) {
-			CroutonW.showAlert(this, e);
+			Crouton.showText(this, e.getMessage(), Style.ALERT);
 		}
 	}
 
@@ -44,7 +43,7 @@ public class StartActivity extends SherlockActivity {
 			}
 		} catch (IllegalStateException e) {
 			sessionKeeper.unlink();
-			CroutonW.showAlert(this, e);
+			Crouton.showText(this, e.getMessage(), Style.ALERT);
 		}
 
 	}
