@@ -1,20 +1,13 @@
 package com.github.ironjan.photodrop.fragments;
 
-import android.widget.EditText;
-import android.widget.ToggleButton;
+import android.widget.*;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.StartActivity_;
-import com.github.ironjan.photodrop.dbwrap.SessionKeeper;
-import com.github.ironjan.photodrop.helper.Prefs_;
-import com.googlecode.androidannotations.annotations.AfterInject;
-import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.Bean;
-import com.googlecode.androidannotations.annotations.Click;
-import com.googlecode.androidannotations.annotations.EFragment;
-import com.googlecode.androidannotations.annotations.ViewById;
-import com.googlecode.androidannotations.annotations.sharedpreferences.Pref;
+import com.actionbarsherlock.app.*;
+import com.github.ironjan.photodrop.*;
+import com.github.ironjan.photodrop.dbwrap.*;
+import com.github.ironjan.photodrop.helper.*;
+import com.googlecode.androidannotations.annotations.*;
+import com.googlecode.androidannotations.annotations.sharedpreferences.*;
 
 @EFragment(R.layout.frgmt_pref)
 public class PrefFragment extends SherlockFragment {
@@ -56,6 +49,7 @@ public class PrefFragment extends SherlockFragment {
 	void updateSyncOnlyOnWifiEnabled() {
 		mAutomaticSync = tglAutomaticSync.isChecked();
 		tglSyncOnlyWifi.setEnabled(mAutomaticSync);
+		txtSyncInterval.setEnabled(mAutomaticSync);
 	}
 
 	@Override
