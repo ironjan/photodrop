@@ -1,22 +1,18 @@
 package com.github.ironjan.photodrop.persistence;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Locale;
+import java.io.*;
+import java.util.*;
 
-import android.annotation.SuppressLint;
-import android.location.Location;
-import android.util.Log;
+import android.annotation.*;
+import android.location.*;
+import android.util.*;
 
 public class PostMetadata {
 	private static final String TAG = PostMetadata.class.getSimpleName();
 
 	public final String comment;
-	private Double latitude;
-	private Double longitude;
+	public final Double latitude;
+	public final Double longitude;
 
 	@SuppressWarnings("nls")
 	private static final String latitudeKey = "latitude:",

@@ -1,21 +1,14 @@
 package com.github.ironjan.photodrop.views;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.content.*;
+import android.graphics.*;
+import android.view.*;
+import android.widget.*;
 
-import com.github.ironjan.photodrop.R;
-import com.github.ironjan.photodrop.helper.ImageOperations;
-import com.github.ironjan.photodrop.helper.ImageStorage;
-import com.github.ironjan.photodrop.persistence.Post;
-import com.googlecode.androidannotations.annotations.Bean;
-import com.googlecode.androidannotations.annotations.EViewGroup;
-import com.googlecode.androidannotations.annotations.UiThread;
-import com.googlecode.androidannotations.annotations.ViewById;
+import com.github.ironjan.photodrop.*;
+import com.github.ironjan.photodrop.helper.*;
+import com.github.ironjan.photodrop.persistence.*;
+import com.googlecode.androidannotations.annotations.*;
 
 @EViewGroup(R.layout.view_post_in_stream)
 public class PostView extends RelativeLayout {
@@ -35,7 +28,7 @@ public class PostView extends RelativeLayout {
 	private Bitmap mThumbnail;
 
 	private Post mPost;
-	
+
 	public PostView(Context context) {
 		super(context);
 	}
@@ -47,7 +40,8 @@ public class PostView extends RelativeLayout {
 	}
 
 	void loadThumb() {
-		imgPhoto.setImageBitmap(ImageOperations.loadScaledImage(mPost.imagePath, 512, 512));
+		imgPhoto.setImageBitmap(ImageOperations.loadScaledImage(
+				mPost.imagePath, 512, 512));
 		progress.setVisibility(View.GONE);
 	}
 
@@ -62,4 +56,9 @@ public class PostView extends RelativeLayout {
 		progress.setVisibility(View.GONE);
 	}
 
+	@Click({ R.id.imgPhoto, R.id.txtComment })
+	void click() {
+		SinglePostActivity_.intent(getContext()).imagePath(mPost.imagePath)
+				.start();
+	}
 }

@@ -1,16 +1,13 @@
 package com.github.ironjan.photodrop.persistence;
 
-import java.io.File;
+import java.io.*;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.*;
 
-import com.github.ironjan.photodrop.helper.ImageStorage;
-import com.github.ironjan.photodrop.model.DirKeeper;
-import com.googlecode.androidannotations.annotations.AfterInject;
-import com.googlecode.androidannotations.annotations.Bean;
-import com.googlecode.androidannotations.annotations.EBean;
-import com.googlecode.androidannotations.api.Scope;
+import com.github.ironjan.photodrop.helper.*;
+import com.github.ironjan.photodrop.model.*;
+import com.googlecode.androidannotations.annotations.*;
+import com.googlecode.androidannotations.api.*;
 
 @EBean(scope = Scope.Singleton)
 public class PostCreator {
@@ -30,12 +27,18 @@ public class PostCreator {
 	@Bean
 	ImageStorage mImageStorage;
 
+	/**
+	 * Creates post from metadata file
+	 * 
+	 * @param metadataFilePath
+	 *            the post's metadata file
+	 * @return the corresponding post
+	 */
 	public Post fromMetadataFile(String metadataFilePath) {
 		if (!metadataFilePath.endsWith(".meta")) {
 			return null;
 		}
 
-		
 		String fullPath = metadataFilePath;
 		if (!fullPath.contains(mDirPath)) {
 			fullPath = mDirPath.concat("/").concat(metadataFilePath); //$NON-NLS-1$
